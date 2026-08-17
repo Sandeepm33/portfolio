@@ -1,0 +1,29 @@
+
+> sandeep-bhargav-portfolio@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.5.23
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.206:3000
+
+ ✓ Starting...
+ ✓ Ready in 3.9s
+ ○ Compiling / ...
+ GET / 200 in 10509ms
+ GET / 200 in 11669ms
+ GET / 200 in 266ms
+ GET / 200 in 356ms
+ GET / 200 in 176ms
+ GET / 200 in 547ms
+ GET / 200 in 144ms
+ GET / 200 in 562ms
+ ✓ Compiled / in 1066ms (1316 modules)
+ GET / 200 in 802ms
+ GET / 200 in 145ms
+ GET / 200 in 826ms
+ GET / 200 in 351ms
+ GET / 200 in 270ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1336ms (1321 modules)
+ GET /analytics 404 in 1623ms
+ GET / 200 in 414ms
