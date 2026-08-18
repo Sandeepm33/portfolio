@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://sandeepbhargav.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://portfolio-seven-ivory-88.vercel.app'),
   title: {
     default: 'Sandeep Bhargav | React & Full-Stack Developer',
     template: '%s | Sandeep Bhargav',
@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     'TypeScript Developer', 'Full-Stack Developer', 'Sandeep Bhargav', 
     'Web Developer', 'Software Engineer', 'Portfolio', 'Hyderabad', 'India'
   ],
-  authors: [{ name: 'Sandeep Bhargav', url: 'https://sandeepbhargav.com' }],
+  authors: [{ name: 'Sandeep Bhargav', url: 'https://portfolio-seven-ivory-88.vercel.app' }],
   creator: 'Sandeep Bhargav',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://sandeepbhargav.com',
+    url: 'https://portfolio-seven-ivory-88.vercel.app',
     title: 'Sandeep Bhargav | React & Full-Stack Developer',
     description: 'Portfolio of Sandeep Bhargav, a React and Full-Stack Developer building scalable, modern web applications.',
     siteName: 'Sandeep Bhargav Portfolio',
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://sandeepbhargav.com',
+    canonical: 'https://portfolio-seven-ivory-88.vercel.app',
   },
 };
 
