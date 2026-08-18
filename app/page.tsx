@@ -3,11 +3,28 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useInView, useMotionValue, useReducedMotion, useSpring, useScroll, useTransform } from 'framer-motion';
-import { ArrowDownRight, ArrowUpRight, Check, ChevronRight, Code2, Copy, Download, Github, Linkedin, Mail, Menu, Moon, Send, Sun, TerminalSquare, X } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, Check, ChevronRight, Code2, Copy, Download, Github, Linkedin, Mail, Menu, Moon, Search, Send, Sun, TerminalSquare, X } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { GitHubCalendar } from 'react-github-calendar';
+import CommandPalette from './components/CommandPalette';
 const stack = [
-  ['React', 'Interface systems', 'Composing product-grade UI with deliberate state and motion.'], ['Next.js', 'Web products', 'Fast, search-friendly applications with modern routing.'], ['TypeScript', 'Reliable scale', 'Type-safe contracts that keep teams moving quickly.'], ['JavaScript', 'Core craft', 'The flexible layer underneath every polished interaction.'], ['Node.js', 'Product APIs', 'Eventful server-side systems that meet frontend needs.'], ['NestJS', 'Backend architecture', 'Structured services designed to grow without friction.'], ['Spring Boot', 'Enterprise systems', 'Reliable Java services and production integrations.'], ['PostgreSQL', 'Data integrity', 'Thoughtful relational modelling and query performance.'], ['MongoDB', 'Flexible data', 'Document models for fast-moving product requirements.'], ['Firebase', 'Rapid shipping', 'Authentication, realtime data and streamlined deployment.'], ['AWS', 'Cloud delivery', 'Pragmatic cloud infrastructure and release workflows.'], ['Docker', 'Reproducible builds', 'Same environment from local development to production.'], ['Tailwind CSS', 'Design velocity', 'Consistent interfaces without CSS drift.'], ['Material UI', 'Product foundations', 'Accessible primitives shaped into bespoke experiences.'], ['Redux', 'State clarity', 'Predictable app state for complex user flows.'], ['GraphQL', 'Connected data', 'Precise client data requirements with scalable APIs.'], ['Git', 'Team flow', 'Versioned collaboration and confident iteration.'],
+  { name: 'React', category: 'frontend', use: 'Interface systems', desc: 'Composing product-grade UI with deliberate state and motion.' },
+  { name: 'Next.js', category: 'frontend', use: 'Web products', desc: 'Fast, search-friendly applications with modern routing.' },
+  { name: 'TypeScript', category: 'frontend', use: 'Reliable scale', desc: 'Type-safe contracts that keep teams moving quickly.' },
+  { name: 'JavaScript', category: 'frontend', use: 'Core craft', desc: 'The flexible layer underneath every polished interaction.' },
+  { name: 'Node.js', category: 'backend', use: 'Product APIs', desc: 'Eventful server-side systems that meet frontend needs.' },
+  { name: 'NestJS', category: 'backend', use: 'Backend architecture', desc: 'Structured services designed to grow without friction.' },
+  { name: 'Spring Boot', category: 'backend', use: 'Enterprise systems', desc: 'Reliable Java services and production integrations.' },
+  { name: 'PostgreSQL', category: 'database', use: 'Data integrity', desc: 'Thoughtful relational modelling and query performance.' },
+  { name: 'MongoDB', category: 'database', use: 'Flexible data', desc: 'Document models for fast-moving product requirements.' },
+  { name: 'Firebase', category: 'database', use: 'Rapid shipping', desc: 'Authentication, realtime data and streamlined deployment.' },
+  { name: 'AWS', category: 'tools', use: 'Cloud delivery', desc: 'Pragmatic cloud infrastructure and release workflows.' },
+  { name: 'Docker', category: 'tools', use: 'Reproducible builds', desc: 'Same environment from local development to production.' },
+  { name: 'Tailwind CSS', category: 'frontend', use: 'Design velocity', desc: 'Consistent interfaces without CSS drift.' },
+  { name: 'Material UI', category: 'frontend', use: 'Product foundations', desc: 'Accessible primitives shaped into bespoke experiences.' },
+  { name: 'Redux', category: 'frontend', use: 'State clarity', desc: 'Predictable app state for complex user flows.' },
+  { name: 'GraphQL', category: 'backend', use: 'Connected data', desc: 'Precise client data requirements with scalable APIs.' },
+  { name: 'Git', category: 'tools', use: 'Team flow', desc: 'Versioned collaboration and confident iteration.' },
 ];
 
 const projects = [
@@ -25,10 +42,28 @@ const terminalResponses: Record<string, string[]> = {
   skills: ['React, Next.js, TypeScript, JavaScript, HTML5, CSS3, Material UI and Bootstrap.', 'REST API integration with Axios and Fetch API.'],
   projects: ['TeamTrakr · Teamrex · Jobber · Time & Space · Zenn · St Dreux', 'Scroll up for selected work.'],
   experience: ['Frontend Developer at TResource Innovations Pvt Ltd (part of Ekipit).', 'July 2024 to present.'],
-  contact: ['Open to meaningful product challenges.', 'sandeepbhargavmurarishetti@gmail.com'],
+  contact: ['Open to meaningful product challenges.', 'Email: sandeepbhargavmurarishetti@gmail.com', 'Phone/WhatsApp: +91 9963887021'],
 };
 
 const reveal = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.18 }, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } } as const;
+
+const headingContainer = {
+  initial: {},
+  whileInView: {
+    transition: {
+      staggerChildren: 0.1,
+    }
+  }
+} as const;
+
+const headingLine = {
+  initial: { y: '100%', opacity: 0 },
+  whileInView: { 
+    y: 0, 
+    opacity: 1,
+    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] }
+  }
+} as const;
 
 function Magnetic({ children, className = '', onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
   const x = useMotionValue(0); const y = useMotionValue(0); const sx = useSpring(x, { stiffness: 220, damping: 16 }); const sy = useSpring(y, { stiffness: 220, damping: 16 });
@@ -37,7 +72,55 @@ function Magnetic({ children, className = '', onClick }: { children: React.React
 
 function Cursor() { const x = useMotionValue(-50); const y = useMotionValue(-50); const sx = useSpring(x, { stiffness: 400, damping: 30 }); const sy = useSpring(y, { stiffness: 400, damping: 30 }); const [mode, setMode] = useState(''); useEffect(() => { const move = (e: MouseEvent) => { x.set(e.clientX); y.set(e.clientY); const t = e.target as HTMLElement; setMode(t.closest('[data-cursor]')?.getAttribute('data-cursor') || ''); }; window.addEventListener('mousemove', move); return () => window.removeEventListener('mousemove', move); }, [x, y]); return <><motion.div className="cursor-spotlight" style={{ x: sx, y: sy }} /><motion.div className={`cursor ${mode}`} style={{ x: sx, y: sy }}>{mode === 'view' && <span>VIEW</span>}</motion.div></>; }
 
-function Navbar({ light, setLight }: { light: boolean; setLight: (v: boolean) => void }) { const [open, setOpen] = useState(false); const links = ['Home', 'About', 'Skills', 'Projects', 'Experience', 'Contact']; return <header className="nav-wrap"><nav className="nav glass" aria-label="Main navigation"><a className="brand" href="#home">sandeep bhargav murarishetty</a><div className="nav-links">{links.map(l => <a key={l} href={`#${l.toLowerCase()}`}>{l}</a>)}</div><div className="nav-actions"><button aria-label="Toggle color theme" className="icon-button" onClick={() => setLight(!light)}>{light ? <Moon size={16} /> : <Sun size={16} />}</button><a className="button primary" style={{ padding: '8px 14px', fontSize: '10px', gap: '6px' }} href="/images/Sandeep%20bhargav%20_resume.pdf" target="_blank" rel="noopener noreferrer"><Download size={14} /> Resume</a><button aria-label="Open menu" className="icon-button mobile-menu" onClick={() => setOpen(!open)}>{open ? <X size={18} /> : <Menu size={18} />}</button></div></nav><AnimatePresence>{open && <motion.div className="mobile-nav glass" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>{links.map(l => <a key={l} onClick={() => setOpen(false)} href={`#${l.toLowerCase()}`}>{l}</a>)}</motion.div>}</AnimatePresence></header> }
+function Navbar({ light, setLight, onOpenSearch }: { light: boolean; setLight: (v: boolean) => void; onOpenSearch: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [isMac, setIsMac] = useState(false);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsMac(/Mac|iPod|iPhone|iPad/.test(navigator.platform || navigator.userAgent || ''));
+    }
+  }, []);
+
+  const links = ['Home', 'About', 'Skills', 'Projects', 'Experience', 'Contact'];
+  return (
+    <header className="nav-wrap">
+      <nav className="nav glass" aria-label="Main navigation">
+        <a className="brand" href="#home">sandeep bhargav <span className="brand-last">murarishetty</span></a>
+        <div className="nav-links">
+          {links.map(l => <a key={l} href={`#${l.toLowerCase()}`}>{l}</a>)}
+        </div>
+        <div className="nav-actions">
+          <button 
+            onClick={onOpenSearch} 
+            className="search-trigger-btn" 
+            aria-label="Open Command Palette"
+          >
+            <Search size={14} className="search-icon-nav" />
+            <span className="search-text">Search</span>
+            <kbd className="search-kbd">{isMac ? '⌘K' : 'Ctrl+K'}</kbd>
+          </button>
+          <button aria-label="Toggle color theme" className="icon-button" onClick={() => setLight(!light)}>
+            {light ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
+          <a className="button primary" style={{ padding: '8px 14px', fontSize: '12px', gap: '6px' }} href="/images/Sandeep%20bhargav%20_resume.pdf" target="_blank" rel="noopener noreferrer">
+            <Download size={14} /> Resume
+          </a>
+          <button aria-label="Open menu" className="icon-button mobile-menu" onClick={() => setOpen(!open)}>
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+      </nav>
+      <AnimatePresence>
+        {open && (
+          <motion.div className="mobile-nav glass" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+            {links.map(l => <a key={l} onClick={() => setOpen(false)} href={`#${l.toLowerCase()}`}>{l}</a>)}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
 
 function CodePanel() { return <div className="workspace-wrap"><div className="workspace"><div className="editor-top"><div className="dots"><i /><i /><i /></div><span>sandeep.ts</span><Code2 size={15} /></div><pre><code><span className="purple">const</span> <span className="blue">developer</span> = {'{'}{`\n`}  <span className="aqua">name</span>: <span className="yellow">&quot;Sandeep&quot;</span>,{`\n`}  <span className="aqua">stack</span>: [<span className="yellow">&quot;React&quot;</span>, <span className="yellow">&quot;Next.js&quot;</span>, <span className="yellow">&quot;Node.js&quot;</span>],{`\n`}  <span className="aqua">passion</span>: <span className="yellow">&quot;Building products&quot;</span>,{`\n`}  <span className="aqua">approach</span>: <span className="yellow">&quot;Intentional&quot;</span>{`\n`}{'}'};</code></pre><div className="editor-status"><span><b /> system online</span><span>TypeScript</span></div></div><motion.div className="terminal-float" animate={{ y: [0, -8, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}><div className="float-title"><TerminalSquare size={13} /> terminal <span>•••</span></div><p>$ npm run build</p><p className="muted">$ deploying...</p><p className="success">$ success <Check size={12} /></p></motion.div><div className="orbit orbit-one" /><div className="orbit orbit-two" /></div> }
 
@@ -61,11 +144,28 @@ function Intro() {
     <motion.section ref={ref} style={{ y, opacity }} id="about" className="section intro">
       <div className="intro-eyebrow"><span>01 / Behind the code</span></div>
       <div className="intro-headline">
-        <h2>
-          I don&apos;t just<br />
-          <span className="outline-text">write code.</span><br />
-          I build <span className="accent-word">experiences.</span>
-        </h2>
+        <motion.h2
+          initial="initial"
+          whileInView="whileInView"
+          viewport={{ once: false, amount: 0.2 }}
+          variants={headingContainer}
+        >
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              I don&apos;t just
+            </motion.div>
+          </div>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} className="outline-text" variants={headingLine}>
+              write code.
+            </motion.div>
+          </div>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              I build <span className="accent-word">experiences.</span>
+            </motion.div>
+          </div>
+        </motion.h2>
       </div>
       <div className="intro-body">
         <div className="intro-left">
@@ -96,13 +196,15 @@ function Intro() {
 }
 
 import { SiReact, SiNextdotjs, SiTypescript, SiJavascript, SiNodedotjs, SiNestjs, SiSpringboot, SiPostgresql, SiMongodb, SiFirebase, SiDocker, SiTailwindcss, SiMui, SiRedux, SiGraphql, SiGit } from 'react-icons/si';
-import { FaAws } from 'react-icons/fa';
+import { FaAws, FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
 
 function TechStack() { 
   const ref = useRef(null); 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] }); 
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]); 
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]); 
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.8, 1]); 
+
+  const [activeTab, setActiveTab] = useState<'all' | 'frontend' | 'backend' | 'database' | 'tools'>('all');
 
   const icons: Record<string, React.ReactNode> = {
     'React': <SiReact size={24} color="#61DAFB" />,
@@ -124,28 +226,88 @@ function TechStack() {
     'Git': <SiGit size={24} color="#F05032" />,
   };
 
+  const filteredStack = activeTab === 'all' 
+    ? stack 
+    : stack.filter(item => item.category === activeTab);
+
+  const tabs = [
+    { id: 'all', label: 'All' },
+    { id: 'frontend', label: 'Frontend' },
+    { id: 'backend', label: 'Backend' },
+    { id: 'database', label: 'DB' },
+    { id: 'tools', label: 'Tools' },
+  ] as const;
+
   return (
     <motion.section ref={ref} style={{ scale, opacity }} id="skills" className="section tech-section">
       <motion.div className="section-label">02 / Technology ecosystem</motion.div>
       <motion.div className="tech-head">
-        <h2>A flexible stack<br />for <span>real products.</span></h2>
+        <motion.h2
+          initial="initial"
+          whileInView="whileInView"
+          viewport={{ once: false, amount: 0.2 }}
+          variants={headingContainer}
+        >
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              A flexible stack
+            </motion.div>
+          </div>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              for <span>real products.</span>
+            </motion.div>
+          </div>
+        </motion.h2>
         <p>Tools are only valuable when they help you build the right thing. Here&apos;s what I reach for and why.</p>
       </motion.div>
-      
-      <div className="tech-grid">
-        {stack.map(([name, use, desc]) => (
-          <div key={name} className="tech-card glass">
-            <div className="tech-card-header">
-              <span className="tech-icon">{icons[name] || <Code2 size={24} />}</span>
-              <div>
-                <strong>{name}</strong>
-                <small>{use}</small>
-              </div>
-            </div>
-            <p>{desc}</p>
-          </div>
-        ))}
+
+      {/* Categories Tabs */}
+      <div className="tech-tabs-wrapper">
+        <div className="tech-tabs glass">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`tech-tab ${activeTab === tab.id ? 'active' : ''}`}
+            >
+              {activeTab === tab.id && (
+                <motion.span
+                  layoutId="activeTechTab"
+                  className="tech-tab-bg"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
+      
+      <motion.div layout className="tech-grid">
+        <AnimatePresence mode="popLayout">
+          {filteredStack.map((item) => (
+            <motion.div
+              layout
+              initial={{ opacity: 0, scale: 0.9, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 10 }}
+              transition={{ duration: 0.25 }}
+              key={item.name}
+              className="tech-card glass"
+            >
+              <div className="tech-card-header">
+                <span className="tech-icon">{icons[item.name] || <Code2 size={24} />}</span>
+                <div>
+                  <strong>{item.name}</strong>
+                  <small>{item.use}</small>
+                </div>
+              </div>
+              <p>{item.desc}</p>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </motion.section>
   );
 }
@@ -162,23 +324,182 @@ function ProjectPreview({ project }: { project: typeof projects[number] }) {
   return <div className={`preview ${project.accent}${['teamtrakr', 'teamrex', 'zenn', 'stdreux'].includes(project.slug) ? ' screenshot-preview' : ''}`}><div className="preview-nav"><i /><span>{project.title.toUpperCase()}</span><b>•••</b></div><div className="preview-body">{content[project.slug] || fallback}</div></div>;
 }
 
-function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void }) { const ref = useRef(null); const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] }); const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]); const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]); return <motion.section ref={ref} style={{ scale, opacity }} id="projects" className="section projects"><motion.div className="projects-top" {...reveal}><div><div className="section-label">03 / Selected work</div><h2>Built for <span>the real world.</span></h2></div><p>Selected platforms where product thinking, interface craft and technical detail come together.</p></motion.div><div className="project-list">{projects.map((p, i) => <motion.article key={p.slug} className="project" {...reveal}><button data-cursor="view" className="project-visual" onClick={() => onSelect(p)}><ProjectPreview project={p} /><span className="view-project">View case study <ArrowUpRight size={17} /></span></button><div className="project-info"><span className="project-number">{p.number}</span><div><p className="eyebrow">{p.eyebrow}</p><h3>{p.title}</h3><p className="project-desc">{p.description}</p><div className="tags">{p.tech.map(t => <span key={t}>{t}</span>)}</div><div style={{display:'flex',gap:'10px',alignItems:'center',flexWrap:'wrap',marginTop:'12px'}}><button className="text-link" style={{margin:0}} onClick={() => onSelect(p)}>Explore project <ArrowUpRight size={15} /></button>{(p as any).url && <a href={(p as any).url} target="_blank" rel="noopener noreferrer" className="text-link" style={{margin:0,color:'var(--accent)',border:'1px solid var(--accent)',padding:'6px 10px',borderRadius:'4px',fontSize:'10px',fontWeight:700,display:'flex',alignItems:'center',gap:'6px'}}>Visit Live Site <ArrowUpRight size={13} /></a>}</div></div></div></motion.article>)}</div><Magnetic className="all-projects">View all projects <ArrowDownRight size={16} /></Magnetic></motion.section> }
+function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void }) { 
+  const ref = useRef(null); 
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] }); 
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]); 
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]); 
+  return (
+    <motion.section ref={ref} style={{ scale, opacity }} id="projects" className="section projects">
+      <motion.div className="projects-top" {...reveal}>
+        <div>
+          <div className="section-label">03 / Selected work</div>
+          <motion.h2
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: false, amount: 0.2 }}
+            variants={headingContainer}
+          >
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                Built for
+              </motion.div>
+            </div>
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                <span>the real world.</span>
+              </motion.div>
+            </div>
+          </motion.h2>
+        </div>
+        <p>Selected platforms where product thinking, interface craft and technical detail come together.</p>
+      </motion.div>
+      <div className="project-list">{projects.map((p, i) => <motion.article key={p.slug} className="project" {...reveal}><button data-cursor="view" className="project-visual" onClick={() => onSelect(p)}><ProjectPreview project={p} /><span className="view-project">View case study <ArrowUpRight size={17} /></span></button><div className="project-info"><span className="project-number">{p.number}</span><div><p className="eyebrow">{p.eyebrow}</p><h3>{p.title}</h3><p className="project-desc">{p.description}</p><div className="tags">{p.tech.map(t => <span key={t}>{t}</span>)}</div><div style={{display:'flex',gap:'10px',alignItems:'center',flexWrap:'wrap',marginTop:'12px'}}><button className="text-link" style={{margin:0}} onClick={() => onSelect(p)}>Explore project <ArrowUpRight size={15} /></button>{(p as any).url && <a href={(p as any).url} target="_blank" rel="noopener noreferrer" className="text-link" style={{margin:0,color:'var(--accent)',border:'1px solid var(--accent)',padding:'6px 10px',borderRadius:'4px',fontSize:'10px',fontWeight:700,display:'flex',alignItems:'center',gap:'6px'}}>Visit Live Site <ArrowUpRight size={13} /></a>}</div></div></div></motion.article>)}</div><Magnetic className="all-projects">View all projects <ArrowDownRight size={16} /></Magnetic>
+    </motion.section>
+  );
+}
 
-function Experience() { const ref = useRef(null); const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] }); const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]); const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]); const items = [{ year: '2024', title: 'TResource Innovations Pvt Ltd', role: 'Frontend Developer · July 2024 to present', body: 'Building scalable SaaS interfaces for TeamTrakr and Teamrex, from responsive dashboards and component systems to API integration and real-time collaboration surfaces.', tags: ['React', 'Next.js', 'TypeScript', 'REST APIs'] }, { year: '2025', title: 'Client product delivery', role: 'React / Next.js developer', body: 'Delivered recruitment, metro advertising and Australian catering experiences with reusable UI components, responsive workflows and practical API integrations.', tags: ['Redux Toolkit', 'Material UI', 'Bootstrap', 'WebSockets'] }, { year: '2026', title: 'Continuing to build', role: 'Product-minded frontend engineer', body: 'Focused on refining reliable frontend systems, improving performance and translating complex requirements into clear user experiences.', tags: ['React', 'Next.js', 'Git', 'Postman'] }]; return <motion.section ref={ref} style={{ scale, opacity }} id="experience" className="section experience"><motion.div className="section-label" {...reveal}>04 / The journey</motion.div><motion.h2 {...reveal}>A record of<br /><span>making progress.</span></motion.h2><div className="timeline">{items.map((item, i) => <motion.article key={item.year} {...reveal}><div className="time-year">{item.year}<i /></div><div className="time-content"><p className="eyebrow">{item.role}</p><h3>{item.title}</h3><p>{item.body}</p><div className="tags">{item.tags.map(t => <span key={t}>{t}</span>)}</div></div><span className="time-index">0{i + 1}</span></motion.article>)}</div></motion.section> }
+function Experience() { 
+  const ref = useRef(null); 
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] }); 
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]); 
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]); 
+  const items = [{ year: '2024', title: 'TResource Innovations Pvt Ltd', role: 'Frontend Developer · July 2024 to present', body: 'Building scalable SaaS interfaces for TeamTrakr and Teamrex, from responsive dashboards and component systems to API integration and real-time collaboration surfaces.', tags: ['React', 'Next.js', 'TypeScript', 'REST APIs'] }, { year: '2025', title: 'Client product delivery', role: 'React / Next.js developer', body: 'Delivered recruitment, metro advertising and Australian catering experiences with reusable UI components, responsive workflows and practical API integrations.', tags: ['Redux Toolkit', 'Material UI', 'Bootstrap', 'WebSockets'] }, { year: '2026', title: 'Continuing to build', role: 'Product-minded frontend engineer', body: 'Focused on refining reliable frontend systems, improving performance and translating complex requirements into clear user experiences.', tags: ['React', 'Next.js', 'Git', 'Postman'] }]; 
+  return (
+    <motion.section ref={ref} style={{ scale, opacity }} id="experience" className="section experience">
+      <motion.div className="section-label" {...reveal}>04 / The journey</motion.div>
+      <motion.h2
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: false, amount: 0.2 }}
+        variants={headingContainer}
+      >
+        <div style={{ display: 'block', overflow: 'hidden' }}>
+          <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+            A record of
+          </motion.div>
+        </div>
+        <div style={{ display: 'block', overflow: 'hidden' }}>
+          <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+            <span>making progress.</span>
+          </motion.div>
+        </div>
+      </motion.h2>
+      <div className="timeline">{items.map((item, i) => <motion.article key={item.year} {...reveal}><div className="time-year">{item.year}<i /></div><div className="time-content"><p className="eyebrow">{item.role}</p><h3>{item.title}</h3><p>{item.body}</p><div className="tags">{item.tags.map(t => <span key={t}>{t}</span>)}</div></div><span className="time-index">0{i + 1}</span></motion.article>)}</div>
+    </motion.section>
+  );
+}
 
-function Process() { const ref = useRef(null); const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] }); const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]); const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]); const isInView = useInView(ref, { once: false, margin: "-150px" }); const [playKey, setPlayKey] = useState(0); const steps = [['01', 'Understand', 'Listen deeply, frame the actual problem, and identify the outcome worth pursuing.'], ['02', 'Plan', 'Turn uncertainty into a clear execution path before momentum creates expensive rework.'], ['03', 'Design', 'Shape interfaces around people, decisions, and the moments that genuinely matter.'], ['04', 'Build', 'Ship careful, scalable code with performance and accessibility built into the work.'], ['05', 'Launch', 'Test, release, learn — then keep improving what the product needs next.']]; const [active, setActive] = useState(0); return <motion.section ref={ref} style={{ scale, opacity }} className="section process" onMouseEnter={() => setPlayKey(p => p + 1)}><motion.div className="section-label" {...reveal}>05 / How I build</motion.div><motion.div className="process-intro" {...reveal}><h2>Clear thinking.<br /><span>Confident shipping.</span></h2><p>Every useful product follows a rhythm. This is mine.</p></motion.div><div className="process-list" key={playKey}><motion.div className="process-line-active" initial={{ width: "0%" }} animate={isInView ? { width: "calc(100% - 60px)" } : { width: "0%" }} transition={{ duration: 2, ease: "easeInOut" }} />{steps.map(([number, title, body], i) => <motion.button initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 20 }} transition={{ delay: i * 0.4, duration: 0.5, type: 'spring' }} className={active === i ? 'selected' : ''} onClick={() => setActive(i)} key={title}><span>{number}</span><strong>{title}</strong><div>{body}</div><ChevronRight size={18} /></motion.button>)}</div></motion.section> }
+function Process() { 
+  const ref = useRef(null); 
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] }); 
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]); 
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]); 
+  const isInView = useInView(ref, { once: false, margin: "-150px" }); 
+  const [playKey, setPlayKey] = useState(0); 
+  const steps = [['01', 'Understand', 'Listen deeply, frame the actual problem, and identify the outcome worth pursuing.'], ['02', 'Plan', 'Turn uncertainty into a clear execution path before momentum creates expensive rework.'], ['03', 'Design', 'Shape interfaces around people, decisions, and the moments that genuinely matter.'], ['04', 'Build', 'Ship careful, scalable code with performance and accessibility built into the work.'], ['05', 'Launch', 'Test, release, learn — then keep improving what the product needs next.']]; 
+  const [active, setActive] = useState(0); 
+  return (
+    <motion.section ref={ref} style={{ scale, opacity }} className="section process" onMouseEnter={() => setPlayKey(p => p + 1)}>
+      <motion.div className="section-label" {...reveal}>05 / How I build</motion.div>
+      <motion.div className="process-intro" {...reveal}>
+        <motion.h2
+          initial="initial"
+          whileInView="whileInView"
+          viewport={{ once: false, amount: 0.2 }}
+          variants={headingContainer}
+        >
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              Clear thinking.
+            </motion.div>
+          </div>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              <span>Confident shipping.</span>
+            </motion.div>
+          </div>
+        </motion.h2>
+        <p>Every useful product follows a rhythm. This is mine.</p>
+      </motion.div>
+      <div className="process-list" key={playKey}><motion.div className="process-line-active" initial={{ width: "0%" }} animate={isInView ? { width: "calc(100% - 60px)" } : { width: "0%" }} transition={{ duration: 2, ease: "easeInOut" }} />{steps.map(([number, title, body], i) => <motion.button initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 20 }} transition={{ delay: i * 0.4, duration: 0.5, type: 'spring' }} className={active === i ? 'selected' : ''} onClick={() => setActive(i)} key={title}><span>{number}</span><strong>{title}</strong><div>{body}</div><ChevronRight size={18} /></motion.button>)}</div>
+    </motion.section>
+  );
+}
 
 function Activity({ light }: { light: boolean }) { 
   const explicitTheme = {
     light: ['#ebedf0', '#c6e4d1', '#85c79c', '#41a864', '#00b8c4'],
     dark: ['#1f2720', '#456427', '#6b9137', '#94be44', '#00f0ff'],
   };
-  return <section className="section activity"><motion.div className="activity-card" {...reveal}><div className="activity-top"><div><div className="section-label">06 / Builder&apos;s log</div><h2>Steady craft,<br /><span>visible progress.</span></h2></div><div className="live-dot"><i /> active</div></div><div className="activity-grid"><div className="contributions"><div className="contribution-head" style={{ marginBottom: '15px', alignItems: 'center' }}><span>Contribution rhythm</span><span style={{ color: 'var(--accent)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '4px 10px', background: 'color-mix(in srgb, var(--accent) 15%, transparent)', borderRadius: '4px', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>Live GitHub data</span></div><div style={{ overflowX: 'auto', paddingBottom: '10px' }}><GitHubCalendar username="Sandeepm33" colorScheme={light ? 'light' : 'dark'} theme={explicitTheme} blockSize={12} blockMargin={4} fontSize={10} /></div></div><div className="activity-stats"><div><strong>6</strong><small>featured products</small></div><div><strong>2.1</strong><small>years experience</small></div><div><strong>4</strong><small>domains explored</small></div></div></div></motion.div></section>;
+  return (
+    <section className="section activity">
+      <motion.div className="activity-card" {...reveal}>
+        <div className="activity-top">
+          <div>
+            <div className="section-label">06 / Builder&apos;s log</div>
+            <motion.h2
+              initial="initial"
+              whileInView="whileInView"
+              viewport={{ once: false, amount: 0.2 }}
+              variants={headingContainer}
+            >
+              <div style={{ display: 'block', overflow: 'hidden' }}>
+                <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                  Steady craft,
+                </motion.div>
+              </div>
+              <div style={{ display: 'block', overflow: 'hidden' }}>
+                <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                  <span>visible progress.</span>
+                </motion.div>
+              </div>
+            </motion.h2>
+          </div>
+          <div className="live-dot"><i /> active</div>
+        </div><div className="activity-grid"><div className="contributions"><div className="contribution-head" style={{ marginBottom: '15px', alignItems: 'center' }}><span>Contribution rhythm</span><span style={{ color: 'var(--accent)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '4px 10px', background: 'color-mix(in srgb, var(--accent) 15%, transparent)', borderRadius: '4px', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>Live GitHub data</span></div><div style={{ overflowX: 'auto', paddingBottom: '10px' }}><GitHubCalendar username="Sandeepm33" colorScheme={light ? 'light' : 'dark'} theme={explicitTheme} blockSize={12} blockMargin={4} fontSize={10} /></div></div><div className="activity-stats"><div><strong>6</strong><small>featured products</small></div><div><strong>2.1</strong><small>years experience</small></div><div><strong>4</strong><small>domains explored</small></div></div></div></motion.div></section>);
 }
 
 function InteractiveTerminal() { const [command, setCommand] = useState('whoami'); const [copied, setCopied] = useState(false); const output = terminalResponses[command]; return <section className="section terminal-section" style={{ position: 'relative' }}><div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', maxWidth: '700px', height: '400px', background: 'radial-gradient(circle, color-mix(in srgb, var(--accent) 15%, transparent) 0%, transparent 60%)', filter: 'blur(50px)', zIndex: 0, pointerEvents: 'none' }} /><motion.div className="terminal-shell" {...reveal} style={{ position: 'relative', zIndex: 1 }}><div className="terminal-bar"><div className="dots"><i /><i /><i /></div><span><TerminalSquare size={14} /> sandeep@portfolio:~</span><button aria-label="Copy terminal output" onClick={() => { navigator.clipboard?.writeText(output.join('\n')); setCopied(true); setTimeout(() => setCopied(false), 1200); }}>{copied ? <Check size={14} /> : <Copy size={14} />}</button></div><div className="terminal-content"><div><span className="prompt">$</span> <motion.span key={command} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>{command}</motion.span></div><AnimatePresence mode="wait"><motion.div key={command} className="terminal-output" initial="hidden" animate="visible" exit="exit" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.12 } }, exit: { opacity: 0, transition: { duration: 0.1 } } }}>{output.map((line, i) => <motion.p key={line + i} variants={{ hidden: { opacity: 0, y: 5 }, visible: { opacity: 1, y: 0 } }} transition={{ duration: 0.3 }}>{line}</motion.p>)}</motion.div></AnimatePresence><div className="terminal-command"><span className="prompt">$</span><motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} style={{ display: 'inline-block', width: '8px', height: '14px', background: 'var(--accent)', marginLeft: '6px' }} /></div><div className="terminal-commands">{Object.keys(terminalResponses).map(c => <button key={c} className={c === command ? 'active' : ''} onClick={() => setCommand(c)}>{c}</button>)}</div></div></motion.div></section> }
 
-function Contact() { const [form, setForm] = useState({ name: '', email: '', type: '', message: '' }); const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle'); const [errors, setErrors] = useState<Record<string, string>>({}); const submit = (e: React.FormEvent) => { e.preventDefault(); const next: Record<string, string> = {}; if (!form.name.trim()) next.name = 'Please add your name.'; if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'Enter a valid email address.'; if (!form.type) next.type = 'Choose a project type.'; if (form.message.trim().length < 12) next.message = 'Tell me a little more (12 characters minimum).'; setErrors(next); if (Object.keys(next).length) { setState('error'); return; } setState('loading'); emailjs.send('service_ljeh49e', 'template_saxsbhn', { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message }, 'jjNHbEqnK46HE_ryq').then(() => { setState('success'); setForm({ name: '', email: '', type: '', message: '' }); }, (error) => { setState('error'); setErrors({ submit: 'Failed to send message. Please try again later.' }); console.error(error.text); }); }; return <section id="contact" className="section contact"><motion.div className="contact-copy" {...reveal}><div className="section-label">07 / Start something</div><h2>Have an idea?<br /><span>Let&apos;s build it.</span></h2><p>Whether you&apos;re building a product, improving an existing application, or solving a complex technical problem, let&apos;s create something meaningful.</p><div className="contact-links"><a href="mailto:sandeepbhargavmurarishetti@gmail.com"><Mail size={16} /> sandeepbhargavmurarishetti@gmail.com <ArrowUpRight size={14} /></a></div></motion.div><motion.form onSubmit={submit} noValidate {...reveal}><div className="form-row"><label>Name<input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" />{errors.name && <small>{errors.name}</small>}</label><label>Email<input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" />{errors.email && <small>{errors.email}</small>}</label></div><label>Project type<select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}><option value="">Select a project type</option><option>New product</option><option>Existing product improvement</option><option>Frontend development</option><option>Full-stack development</option><option>Something else</option></select>{errors.type && <small>{errors.type}</small>}</label><label>Tell me about it<textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="A little context goes a long way..." rows={4} />{errors.message && <small>{errors.message}</small>}</label><button className="button primary submit" disabled={state === 'loading'}>{state === 'loading' ? 'Sending...' : state === 'success' ? 'Message sent — thank you' : 'Start a conversation'} <Send size={15} /></button>{errors.submit && <p className="form-success" style={{color: '#ff8a79'}}>{errors.submit}</p>}{state === 'success' && <p className="form-success"><Check size={14} /> Your message has been sent successfully. I&apos;ll be in touch soon.</p>}</motion.form></section> }
+function Contact() { 
+  const [form, setForm] = useState({ name: '', email: '', type: '', message: '' }); 
+  const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle'); 
+  const [errors, setErrors] = useState<Record<string, string>>({}); 
+  const submit = (e: React.FormEvent) => { 
+    e.preventDefault(); 
+    const next: Record<string, string> = {}; 
+    if (!form.name.trim()) next.name = 'Please add your name.'; 
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'Enter a valid email address.'; 
+    if (!form.type) next.type = 'Choose a project type.'; 
+    if (form.message.trim().length < 12) next.message = 'Tell me a little more (12 characters minimum).'; 
+    setErrors(next); 
+    if (Object.keys(next).length) { setState('error'); return; } 
+    setState('loading'); 
+    emailjs.send('service_ljeh49e', 'template_saxsbhn', { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message }, 'jjNHbEqnK46HE_ryq').then(() => { setState('success'); setForm({ name: '', email: '', type: '', message: '' }); }, (error) => { setState('error'); setErrors({ submit: 'Failed to send message. Please try again later.' }); console.error(error.text); }); 
+  }; 
+  return (
+    <section id="contact" className="section contact">
+      <motion.div className="contact-copy" {...reveal}>
+        <div className="section-label">07 / Start something</div>
+        <motion.h2
+          initial="initial"
+          whileInView="whileInView"
+          viewport={{ once: false, amount: 0.2 }}
+          variants={headingContainer}
+        >
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              Have an idea?
+            </motion.div>
+          </div>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              <span>Let&apos;s build it.</span>
+            </motion.div>
+          </div>
+        </motion.h2>
+        <p>Whether you&apos;re building a product, improving an existing application, or solving a complex technical problem, let&apos;s create something meaningful.</p><div className="contact-links"><a href="mailto:sandeepbhargavmurarishetti@gmail.com"><Mail size={16} /> sandeepbhargavmurarishetti@gmail.com <ArrowUpRight size={14} /></a><a href="https://wa.me/919963887021" target="_blank" rel="noopener noreferrer"><FaWhatsapp size={16} /> WhatsApp: +91 9963887021 <ArrowUpRight size={14} /></a><a href="tel:+919963887021"><FaPhoneAlt size={15} /> Call: +91 9963887021 <ArrowUpRight size={14} /></a><a href="https://www.linkedin.com/in/sandeep-bhargav-murarishetty-742ab1205/" target="_blank" rel="noopener noreferrer"><Linkedin size={15} /> LinkedIn <ArrowUpRight size={14} /></a></div></motion.div><motion.form onSubmit={submit} noValidate {...reveal}><div className="form-row"><label>Name<input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" />{errors.name && <small>{errors.name}</small>}</label><label>Email<input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" />{errors.email && <small>{errors.email}</small>}</label></div><label>Project type<select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}><option value="">Select a project type</option><option>New product</option><option>Existing product improvement</option><option>Frontend development</option><option>Full-stack development</option><option>Something else</option></select>{errors.type && <small>{errors.type}</small>}</label><label>Tell me about it<textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="A little context goes a long way..." rows={4} />{errors.message && <small>{errors.message}</small>}</label><button className="button primary submit" disabled={state === 'loading'}>{state === 'loading' ? 'Sending...' : state === 'success' ? 'Message sent — thank you' : 'Start a conversation'} <Send size={15} /></button>{errors.submit && <p className="form-success" style={{color: '#ff8a79'}}>{errors.submit}</p>}{state === 'success' && <p className="form-success"><Check size={14} /> Your message has been sent successfully. I&apos;ll be in touch soon.</p>}</motion.form></section>); }
 
 function CaseStudy({ project, close }: { project: typeof projects[number] | null; close: () => void }) { useEffect(() => { const key = (e: KeyboardEvent) => e.key === 'Escape' && close(); window.addEventListener('keydown', key); return () => window.removeEventListener('keydown', key); }, [close]); return <AnimatePresence>{project && <motion.div className="modal-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label={`${project.title} case study`} onMouseDown={close}><motion.article className="case-study" initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 30, opacity: 0 }} onMouseDown={e => e.stopPropagation()}><button className="case-close" onClick={close} aria-label="Close case study"><X size={20} /></button><p className="eyebrow">CASE STUDY / {project.number}</p><h2>{project.title}</h2><ProjectPreview project={project} /><div className="case-grid"><div><small>THE PROBLEM</small><p>{project.problem}</p></div><div><small>THE SOLUTION</small><p>{project.description}</p></div><div><small>ARCHITECTURE</small><p>{project.architecture}</p></div><div><small>RESULT</small><p>{project.result}</p></div></div><div className="case-footer"><div className="tags">{project.tech.map(t => <span key={t}>{t}</span>)}</div><div style={{display:'flex',gap:'10px',alignItems:'center',flexWrap:'wrap'}}>{(project as any).url && <a href={(project as any).url} target="_blank" rel="noopener noreferrer" className="button ghost glass" style={{fontSize:'11px',display:'flex',alignItems:'center',gap:'8px'}}>Visit Live Site <ArrowUpRight size={14} /></a>}<button className="button primary" onClick={close}>Back to work <ArrowDownRight size={16} /></button></div></div></motion.article></motion.div>}</AnimatePresence> }
 
@@ -189,7 +510,24 @@ function ResumeSection() {
     <>
       <section className="section" style={{ padding: '60px 0', borderTop: '1px solid var(--line)', textAlign: 'center' }}>
         <p style={{ color: 'var(--muted)', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px' }}>08 / Full History</p>
-        <h2 style={{ margin: '0 0 30px' }}>View my <br/><span>full experience.</span></h2>
+        <motion.h2
+          initial="initial"
+          whileInView="whileInView"
+          viewport={{ once: false, amount: 0.2 }}
+          variants={headingContainer}
+          style={{ margin: '0 0 30px' }}
+        >
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              View my
+            </motion.div>
+          </div>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              <span>full experience.</span>
+            </motion.div>
+          </div>
+        </motion.h2>
         <button className="button ghost glass" onClick={() => setOpen(true)} style={{ fontSize: '12px', padding: '16px 24px' }}>
           Preview Resume <ArrowUpRight size={16} />
         </button>
@@ -220,4 +558,102 @@ function ResumeSection() {
 
 function Footer() { return <footer><a className="brand" href="#home">SANDEEP<span>.DEV</span></a><p>Designed & engineered with intention.</p><span>© {new Date().getFullYear()} Sandeep Bhargav</span></footer> }
 
-export default function Home() { const [light, setLight] = useState(false); const [selected, setSelected] = useState<typeof projects[number] | null>(null); const [hydrated, setHydrated] = useState(false); const reduce = useReducedMotion(); useEffect(() => { setHydrated(true); }, []); useEffect(() => { document.documentElement.dataset.theme = light ? 'light' : 'dark'; }, [light]); return <main className={hydrated && reduce ? 'reduce-motion' : ''}><Cursor /><Navbar light={light} setLight={setLight} /><Hero /><Intro /><TechStack /><Projects onSelect={setSelected} /><Experience /><Process /><Activity light={light} /><InteractiveTerminal /><Contact /><ResumeSection /><Footer /><CaseStudy project={selected} close={() => setSelected(null)} /></main> }
+export default function Home() {
+  const [light, setLight] = useState(false);
+  const [selected, setSelected] = useState<typeof projects[number] | null>(null);
+  const [hydrated, setHydrated] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = light ? 'light' : 'dark';
+  }, [light]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  return (
+    <main className={hydrated && reduce ? 'reduce-motion' : ''}>
+      <Cursor />
+      <Navbar 
+        light={light} 
+        setLight={setLight} 
+        onOpenSearch={() => setCommandPaletteOpen(true)} 
+      />
+      <Hero />
+      <Intro />
+      <TechStack />
+      <Projects onSelect={setSelected} />
+      <Experience />
+      <Process />
+      <Activity light={light} />
+      <InteractiveTerminal />
+      <Contact />
+      <ResumeSection />
+      <Footer />
+      
+      <CaseStudy 
+        project={selected} 
+        close={() => setSelected(null)} 
+      />
+      
+      <CommandPalette
+        isOpen={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        light={light}
+        setLight={setLight}
+        onSelectProject={setSelected}
+        projects={projects}
+      />
+      <FloatingContact />
+    </main>
+  );
+}
+
+function FloatingContact() {
+  return (
+    <div className="floating-contact-wrap">
+      <a 
+        href="https://www.linkedin.com/in/sandeep-bhargav-murarishetty-742ab1205/" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="floating-btn linkedin" 
+        aria-label="LinkedIn Profile"
+        data-tooltip="LinkedIn Profile"
+      >
+        <Linkedin size={18} />
+      </a>
+      <a 
+        href="https://wa.me/919963887021" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="floating-btn whatsapp" 
+        aria-label="Chat on WhatsApp"
+        data-tooltip="Chat on WhatsApp"
+      >
+        <FaWhatsapp size={20} />
+      </a>
+      <a 
+        href="tel:+919963887021" 
+        className="floating-btn phone" 
+        aria-label="Call Sandeep"
+        data-tooltip="Call Sandeep"
+      >
+        <FaPhoneAlt size={18} />
+      </a>
+    </div>
+  );
+}
+
