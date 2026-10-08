@@ -373,8 +373,7 @@ function TechStack() {
 
       <motion.div
         layout
-        className={activeTab === 'all' ? 'tech-badges-grid' : ''}
-        style={activeTab === 'all' ? {} : { display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center', maxWidth: '980px', margin: '36px auto 0' }}
+        className="tech-badges-grid"
       >
         <AnimatePresence mode="popLayout">
           {filteredStack.map((item) => (
@@ -621,8 +620,6 @@ function Activity() {
   );
 }
 
-function InteractiveTerminal() { const [command, setCommand] = useState('whoami'); const [copied, setCopied] = useState(false); const output = terminalResponses[command]; return <section className="section terminal-section" style={{ position: 'relative' }}><div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', maxWidth: '700px', height: '400px', background: 'radial-gradient(circle, color-mix(in srgb, var(--accent) 15%, transparent) 0%, transparent 60%)', filter: 'blur(50px)', zIndex: 0, pointerEvents: 'none' }} /><motion.div className="terminal-shell" {...reveal} style={{ position: 'relative', zIndex: 1 }}><div className="terminal-bar"><div className="dots"><i /><i /><i /></div><span><TerminalSquare size={14} /> sandeep@portfolio:~</span><button aria-label="Copy terminal output" onClick={() => { navigator.clipboard?.writeText(output.join('\n')); setCopied(true); setTimeout(() => setCopied(false), 1200); }}>{copied ? <Check size={14} /> : <Copy size={14} />}</button></div><div className="terminal-content"><div><span className="prompt">$</span> <motion.span key={command} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>{command}</motion.span></div><AnimatePresence mode="wait"><motion.div key={command} className="terminal-output" initial="hidden" animate="visible" exit="exit" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.12 } }, exit: { opacity: 0, transition: { duration: 0.1 } } }}>{output.map((line, i) => <motion.p key={line + i} variants={{ hidden: { opacity: 0, y: 5 }, visible: { opacity: 1, y: 0 } }} transition={{ duration: 0.3 }}>{line}</motion.p>)}</motion.div></AnimatePresence><div className="terminal-command"><span className="prompt">$</span><motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} style={{ display: 'inline-block', width: '8px', height: '14px', background: 'var(--accent)', marginLeft: '6px' }} /></div><div className="terminal-commands">{Object.keys(terminalResponses).map(c => <button key={c} className={c === command ? 'active' : ''} onClick={() => setCommand(c)}>{c}</button>)}</div></div></motion.div></section> }
-
 function Contact() {
   const [form, setForm] = useState({ name: '', email: '', type: '', message: '' });
   const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -757,7 +754,6 @@ export default function Home() {
       <Experience />
       <Process />
       <Activity />
-      <InteractiveTerminal />
       <Contact />
       <ResumeSection />
       <Footer />

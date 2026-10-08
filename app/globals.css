@@ -830,9 +830,8 @@ h1 em {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 14px;
-  max-width: 980px;
-  margin: 36px auto 0;
   width: 100%;
+  margin: 36px 0 0;
 }
 
 .tech-card-box {
