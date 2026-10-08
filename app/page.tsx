@@ -412,7 +412,20 @@ function ProjectPreview({ project }: { project: typeof projects[number] }) {
     stdreux: <div style={{ width: '100%', background: '#f0f2f5' }}><img src="/images/stdreux.png" alt="St Dreux platform" style={{ width: '100%', height: 'auto', display: 'block' }} /></div>,
   } as Record<string, React.ReactNode>;
   const fallback = <div className="event-copy"><small>DIGITAL PLATFORM</small><strong>{project.title}<br /><i>made clear.</i></strong><span className="preview-action">Explore experience</span></div>;
-  return <div className={`preview ${project.accent}${['teamtrakr', 'teamrex', 'zenn', 'stdreux'].includes(project.slug) ? ' screenshot-preview' : ''}`}><div className="preview-nav"><i /><span>{project.title.toUpperCase()}</span><b>•••</b></div><div className="preview-body">{content[project.slug] || fallback}</div></div>;
+  return (
+    <div className={`preview ${project.accent}${['teamtrakr', 'teamrex', 'zenn', 'stdreux'].includes(project.slug) ? ' screenshot-preview' : ''}`}>
+      <div className="preview-nav">
+        <div className="preview-dots">
+          <span className="dot red" />
+          <span className="dot yellow" />
+          <span className="dot green" />
+        </div>
+        <span className="preview-title">{project.title.toUpperCase()}</span>
+        <b className="preview-more">•••</b>
+      </div>
+      <div className="preview-body">{content[project.slug] || fallback}</div>
+    </div>
+  );
 }
 
 function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void }) {
@@ -420,6 +433,13 @@ function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] });
   const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  const getBentoClass = (index: number) => {
+    if (index === 0) return 'bento-hero';
+    if (index === 1 || index === 2) return 'bento-mid';
+    return 'bento-compact';
+  };
+
   return (
     <motion.section ref={ref} style={{ scale, opacity }} id="projects" className="section projects">
       <motion.div className="projects-top" {...reveal}>
@@ -445,7 +465,49 @@ function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void
         </div>
         <p>Selected platforms where product thinking, interface craft and technical detail come together.</p>
       </motion.div>
-      <div className="project-list">{projects.map((p, i) => <motion.article key={p.slug} className="project" {...reveal}><button data-cursor="view" className="project-visual" onClick={() => onSelect(p)}><ProjectPreview project={p} /><span className="view-project">View case study <ArrowUpRight size={17} /></span></button><div className="project-info"><span className="project-number">{p.number}</span><div><p className="eyebrow">{p.eyebrow}</p><h3>{p.title}</h3><p className="project-desc">{p.description}</p><div className="tags">{p.tech.map(t => <span key={t}>{t}</span>)}</div><div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', marginTop: '12px' }}><button className="text-link" style={{ margin: 0 }} onClick={() => onSelect(p)}>Explore project <ArrowUpRight size={15} /></button>{(p as any).url && <a href={(p as any).url} target="_blank" rel="noopener noreferrer" className="text-link" style={{ margin: 0, color: 'var(--accent)', border: '1px solid var(--accent)', padding: '6px 10px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>Visit Live Site <ArrowUpRight size={13} /></a>}</div></div></div></motion.article>)}</div><Magnetic className="all-projects">View all projects <ArrowDownRight size={16} /></Magnetic>
+
+      <div className="bento-grid">
+        {projects.map((p, i) => (
+          <motion.article key={p.slug} className={`project ${getBentoClass(i)}`} {...reveal}>
+            <button data-cursor="view" className="project-visual" onClick={() => onSelect(p)}>
+              <ProjectPreview project={p} />
+              <span className="view-project">
+                View case study <ArrowUpRight size={17} />
+              </span>
+            </button>
+            <div className="project-info">
+              <div className="project-header-meta">
+                <span className="project-number">{p.number}</span>
+                {i === 0 && <span className="bento-featured-badge"><span className="pulse-dot" /> FEATURED SAAS</span>}
+              </div>
+              <div>
+                <p className="eyebrow">{p.eyebrow}</p>
+                <h3>{p.title}</h3>
+                <p className="project-desc">{p.description}</p>
+                <div className="tags">
+                  {p.tech.map(t => <span key={t}>{t}</span>)}
+                </div>
+                <div className="project-actions">
+                  <button className="text-link" style={{ margin: 0 }} onClick={() => onSelect(p)}>
+                    Explore project <ArrowUpRight size={15} />
+                  </button>
+                  {(p as any).url && (
+                    <a
+                      href={(p as any).url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-link live-site-btn"
+                    >
+                      Visit Live Site <ArrowUpRight size={13} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </motion.article>
+        ))}
+      </div>
+      <Magnetic className="all-projects">View all projects <ArrowDownRight size={16} /></Magnetic>
     </motion.section>
   );
 }
