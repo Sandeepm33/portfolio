@@ -24,8 +24,7 @@ interface Project {
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
-  light: boolean;
-  setLight: (light: boolean) => void;
+
   onSelectProject: (project: Project) => void;
   projects: Project[];
 }
@@ -43,8 +42,7 @@ interface CommandItem {
 export default function CommandPalette({
   isOpen,
   onClose,
-  light,
-  setLight,
+
   onSelectProject,
   projects,
 }: CommandPaletteProps) {
@@ -151,17 +149,7 @@ export default function CommandPalette({
       },
 
       // Actions
-      {
-        id: 'action-theme',
-        title: `Switch to ${light ? 'Dark' : 'Light'} Mode`,
-        subtitle: `Toggle the application color theme to ${light ? 'dark' : 'light'}`,
-        category: 'Actions',
-        icon: light ? <Moon size={18} /> : <Sun size={18} />,
-        shortcut: ['T'],
-        action: () => {
-          setLight(!light);
-        },
-      },
+
       {
         id: 'action-resume',
         title: 'Download Resume',
@@ -240,7 +228,7 @@ export default function CommandPalette({
     });
 
     return list;
-  }, [projects, light, setLight, onClose, onSelectProject, emailCopied]);
+  }, [projects, onClose, onSelectProject, emailCopied]);
 
   // Filter commands by search query
   const filteredCommands = useMemo(() => {
