@@ -133,7 +133,7 @@ function Hero() {
   const yPortrait = useTransform(scrollY, [0, 800], [0, 100]);
 
   return (
-    <section id="home" className="hero-section hero-section-wrap">
+    <section id="home" className="hero-section hero-section-wrap section-bg-hero">
       <div className="hero-bg-overlay">
         <svg className="hero-bg-svg" preserveAspectRatio="none" viewBox="0 0 1440 900" fill="none">
           <path d="M1440 0H640C1000 250 800 650 1440 900V0Z" fill="var(--accent)" opacity="0.95" />
@@ -227,57 +227,59 @@ function Intro() {
     { name: 'Problem Solving', num: '07', pct: 90 },
   ];
   return (
-    <motion.section ref={ref} style={{ y, opacity }} id="about" className="section intro">
-      <div className="intro-eyebrow"><span>01 / Behind the code</span></div>
-      <div className="intro-headline">
-        <motion.h2
-          initial="initial"
-          whileInView="whileInView"
-          viewport={{ once: false, amount: 0.2 }}
-          variants={headingContainer}
-        >
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              I don&apos;t just
-            </motion.div>
+    <section id="about" className="section-wrapper section-bg-about">
+      <motion.section ref={ref} style={{ y, opacity }} className="section intro">
+        <div className="intro-eyebrow"><span>01 / Behind the code</span></div>
+        <div className="intro-headline">
+          <motion.h2
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: false, amount: 0.2 }}
+            variants={headingContainer}
+          >
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                I don&apos;t just
+              </motion.div>
+            </div>
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} className="outline-text" variants={headingLine}>
+                write code.
+              </motion.div>
+            </div>
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                I build <span className="accent-word">experiences.</span>
+              </motion.div>
+            </div>
+          </motion.h2>
+        </div>
+        <div className="intro-body">
+          <div className="intro-left">
+            <p>With 2.1 years of frontend experience, I turn wireframes and product requirements into responsive, reliable React experiences — with attention to performance, clarity and the details users notice.</p>
+            <div className="intro-stats">
+              {[['2.1', 'Years experience'], ['6+', 'Projects shipped'], ['11+', 'Core tools'], ['100%', 'Passion']].map(([n, l]) => (
+                <div key={l} className="intro-stat glass"><strong>{n}</strong><span>{l}</span></div>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} className="outline-text" variants={headingLine}>
-              write code.
-            </motion.div>
-          </div>
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              I build <span className="accent-word">experiences.</span>
-            </motion.div>
-          </div>
-        </motion.h2>
-      </div>
-      <div className="intro-body">
-        <div className="intro-left">
-          <p>With 2.1 years of frontend experience, I turn wireframes and product requirements into responsive, reliable React experiences — with attention to performance, clarity and the details users notice.</p>
-          <div className="intro-stats">
-            {[['2.1', 'Years experience'], ['6+', 'Projects shipped'], ['11+', 'Core tools'], ['100%', 'Passion']].map(([n, l]) => (
-              <div key={l} className="intro-stat glass"><strong>{n}</strong><span>{l}</span></div>
+          <div className="intro-skills">
+            {skills.map((s) => (
+              <div key={s.name} className="skill-card">
+                <div className="skill-card-accent" />
+                <span className="skill-card-ghost">{s.num}</span>
+                <span className="skill-card-num">{s.num}</span>
+                <div className="skill-card-name">{s.name}</div>
+                <div className="skill-card-footer">
+                  <div className="skill-card-track"><div className="skill-card-fill" style={{ width: `${s.pct}%` }} /></div>
+                  <span className="skill-card-pct">{s.pct}%</span>
+                </div>
+              </div>
             ))}
           </div>
         </div>
-        <div className="intro-skills">
-          {skills.map((s) => (
-            <div key={s.name} className="skill-card">
-              <div className="skill-card-accent" />
-              <span className="skill-card-ghost">{s.num}</span>
-              <span className="skill-card-num">{s.num}</span>
-              <div className="skill-card-name">{s.name}</div>
-              <div className="skill-card-footer">
-                <div className="skill-card-track"><div className="skill-card-fill" style={{ width: `${s.pct}%` }} /></div>
-                <span className="skill-card-pct">{s.pct}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </motion.section>
+      </motion.section>
+    </section>
   );
 }
 
@@ -326,80 +328,82 @@ function TechStack() {
   ] as const;
 
   return (
-    <motion.section ref={ref} style={{ scale, opacity }} id="skills" className="section tech-section">
-      <motion.div className="section-label">02 / Technology ecosystem</motion.div>
-      <motion.div className="tech-head">
-        <motion.h2
-          initial="initial"
-          whileInView="whileInView"
-          viewport={{ once: false, amount: 0.2 }}
-          variants={headingContainer}
-        >
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              A flexible stack
-            </motion.div>
-          </div>
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              for <span>real products.</span>
-            </motion.div>
-          </div>
-        </motion.h2>
-        <p>Tools are only valuable when they help you build the right thing. Here&apos;s what I reach for and why.</p>
-      </motion.div>
+    <section id="skills" className="section-wrapper section-bg-tech">
+      <motion.section ref={ref} style={{ scale, opacity }} className="section tech-section">
+        <motion.div className="section-label">02 / Technology ecosystem</motion.div>
+        <motion.div className="tech-head">
+          <motion.h2
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: false, amount: 0.2 }}
+            variants={headingContainer}
+          >
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                A flexible stack
+              </motion.div>
+            </div>
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                for <span>real products.</span>
+              </motion.div>
+            </div>
+          </motion.h2>
+          <p>Tools are only valuable when they help you build the right thing. Here&apos;s what I reach for and why.</p>
+        </motion.div>
 
-      {/* Categories Tabs */}
-      <div className="tech-tabs-wrapper">
-        <div className="tech-tabs glass">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`tech-tab ${activeTab === tab.id ? 'active' : ''}`}
-            >
-              {activeTab === tab.id && (
-                <motion.span
-                  layoutId="activeTechTab"
-                  className="tech-tab-bg"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
-              {tab.label}
-            </button>
-          ))}
+        {/* Categories Tabs */}
+        <div className="tech-tabs-wrapper">
+          <div className="tech-tabs glass">
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`tech-tab ${activeTab === tab.id ? 'active' : ''}`}
+              >
+                {activeTab === tab.id && (
+                  <motion.span
+                    layoutId="activeTechTab"
+                    className="tech-tab-bg"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <motion.div
-        layout
-        className="tech-badges-grid"
-      >
-        <AnimatePresence mode="popLayout">
-          {filteredStack.map((item) => (
-            <motion.div
-              layout
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 10 }}
-              transition={{ duration: 0.25 }}
-              key={item.name}
-              className="glass tech-card-box"
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40px' }}>
-                {icons[item.name] || <Code2 size={32} />}
-              </div>
-              <strong style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginTop: '12px', letterSpacing: '-0.01em', lineHeight: 1.2 }}>
-                {item.name}
-              </strong>
-              <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--muted)', marginTop: '6px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                {item.category === 'database' ? 'DATABASE' : item.category.toUpperCase()}
-              </span>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
-    </motion.section>
+        <motion.div
+          layout
+          className="tech-badges-grid"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredStack.map((item) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ duration: 0.25 }}
+                key={item.name}
+                className="glass tech-card-box"
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40px' }}>
+                  {icons[item.name] || <Code2 size={32} />}
+                </div>
+                <strong style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginTop: '12px', letterSpacing: '-0.01em', lineHeight: 1.2 }}>
+                  {item.name}
+                </strong>
+                <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--muted)', marginTop: '6px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  {item.category === 'database' ? 'DATABASE' : item.category.toUpperCase()}
+                </span>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </motion.section>
+    </section>
   );
 }
 
@@ -441,74 +445,76 @@ function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void
   };
 
   return (
-    <motion.section ref={ref} style={{ scale, opacity }} id="projects" className="section projects">
-      <motion.div className="projects-top" {...reveal}>
-        <div>
-          <div className="section-label">03 / Selected work</div>
-          <motion.h2
-            initial="initial"
-            whileInView="whileInView"
-            viewport={{ once: false, amount: 0.2 }}
-            variants={headingContainer}
-          >
-            <div style={{ display: 'block', overflow: 'hidden' }}>
-              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-                Built for
-              </motion.div>
-            </div>
-            <div style={{ display: 'block', overflow: 'hidden' }}>
-              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-                <span>the real world.</span>
-              </motion.div>
-            </div>
-          </motion.h2>
-        </div>
-        <p>Selected platforms where product thinking, interface craft and technical detail come together.</p>
-      </motion.div>
+    <section id="projects" className="section-wrapper section-bg-projects">
+      <motion.section ref={ref} style={{ scale, opacity }} className="section projects">
+        <motion.div className="projects-top" {...reveal}>
+          <div>
+            <div className="section-label">03 / Selected work</div>
+            <motion.h2
+              initial="initial"
+              whileInView="whileInView"
+              viewport={{ once: false, amount: 0.2 }}
+              variants={headingContainer}
+            >
+              <div style={{ display: 'block', overflow: 'hidden' }}>
+                <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                  Built for
+                </motion.div>
+              </div>
+              <div style={{ display: 'block', overflow: 'hidden' }}>
+                <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                  <span>the real world.</span>
+                </motion.div>
+              </div>
+            </motion.h2>
+          </div>
+          <p>Selected platforms where product thinking, interface craft and technical detail come together.</p>
+        </motion.div>
 
-      <div className="bento-grid">
-        {projects.map((p, i) => (
-          <motion.article key={p.slug} className={`project ${getBentoClass(i)}`} {...reveal}>
-            <button data-cursor="view" className="project-visual" onClick={() => onSelect(p)}>
-              <ProjectPreview project={p} />
-              <span className="view-project">
-                View case study <ArrowUpRight size={17} />
-              </span>
-            </button>
-            <div className="project-info">
-              <div className="project-header-meta">
-                <span className="project-number">{p.number}</span>
-                {i === 0 && <span className="bento-featured-badge"><span className="pulse-dot" /> FEATURED SAAS</span>}
-              </div>
-              <div>
-                <p className="eyebrow">{p.eyebrow}</p>
-                <h3>{p.title}</h3>
-                <p className="project-desc">{p.description}</p>
-                <div className="tags">
-                  {p.tech.map(t => <span key={t}>{t}</span>)}
+        <div className="bento-grid">
+          {projects.map((p, i) => (
+            <motion.article key={p.slug} className={`project ${getBentoClass(i)}`} {...reveal}>
+              <button data-cursor="view" className="project-visual" onClick={() => onSelect(p)}>
+                <ProjectPreview project={p} />
+                <span className="view-project">
+                  View case study <ArrowUpRight size={17} />
+                </span>
+              </button>
+              <div className="project-info">
+                <div className="project-header-meta">
+                  <span className="project-number">{p.number}</span>
+                  {i === 0 && <span className="bento-featured-badge"><span className="pulse-dot" /> FEATURED SAAS</span>}
                 </div>
-                <div className="project-actions">
-                  <button className="text-link" style={{ margin: 0 }} onClick={() => onSelect(p)}>
-                    Explore project <ArrowUpRight size={15} />
-                  </button>
-                  {(p as any).url && (
-                    <a
-                      href={(p as any).url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-link live-site-btn"
-                    >
-                      Visit Live Site <ArrowUpRight size={13} />
-                    </a>
-                  )}
+                <div>
+                  <p className="eyebrow">{p.eyebrow}</p>
+                  <h3>{p.title}</h3>
+                  <p className="project-desc">{p.description}</p>
+                  <div className="tags">
+                    {p.tech.map(t => <span key={t}>{t}</span>)}
+                  </div>
+                  <div className="project-actions">
+                    <button className="text-link" style={{ margin: 0 }} onClick={() => onSelect(p)}>
+                      Explore project <ArrowUpRight size={15} />
+                    </button>
+                    {(p as any).url && (
+                      <a
+                        href={(p as any).url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-link live-site-btn"
+                      >
+                        Visit Live Site <ArrowUpRight size={13} />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.article>
-        ))}
-      </div>
-      <Magnetic className="all-projects">View all projects <ArrowDownRight size={16} /></Magnetic>
-    </motion.section>
+            </motion.article>
+          ))}
+        </div>
+        <Magnetic className="all-projects">View all projects <ArrowDownRight size={16} /></Magnetic>
+      </motion.section>
+    </section>
   );
 }
 
@@ -534,53 +540,54 @@ function Experience() {
   ];
 
   return (
-    <motion.section
-      ref={ref}
-      id="experience"
-      className="section experience"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.8 }}
-    >
-      <motion.div className="section-label" {...reveal}>04 / My Journey</motion.div>
-      <motion.h2 initial="initial" whileInView="whileInView" viewport={{ once: false, amount: 0.2 }} variants={headingContainer}>
-        <div style={{ display: 'block', overflow: 'hidden' }}>
-          <motion.div style={{ display: 'inline-block' }} variants={headingLine}>My</motion.div>
-        </div>
-        <div style={{ display: 'block', overflow: 'hidden' }}>
-          <motion.div style={{ display: 'inline-block' }} variants={headingLine}><span>journey.</span></motion.div>
-        </div>
-      </motion.h2>
+    <section id="experience" className="section-wrapper section-bg-experience">
+      <motion.section
+        ref={ref}
+        className="section experience"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.div className="section-label" {...reveal}>04 / My Journey</motion.div>
+        <motion.h2 initial="initial" whileInView="whileInView" viewport={{ once: false, amount: 0.2 }} variants={headingContainer}>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>My</motion.div>
+          </div>
+          <div style={{ display: 'block', overflow: 'hidden' }}>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}><span>journey.</span></motion.div>
+          </div>
+        </motion.h2>
 
-      <div className="journey-timeline-wrap">
-        {/* Animated Background Line */}
-        <div className="journey-line">
-          <motion.div style={{ width: '100%', height: '100%', background: '#0f756d', scaleY: pathLength, transformOrigin: 'top center' }} />
-        </div>
+        <div className="journey-timeline-wrap">
+          {/* Animated Background Line */}
+          <div className="journey-line">
+            <motion.div style={{ width: '100%', height: '100%', background: '#0f756d', scaleY: pathLength, transformOrigin: 'top center' }} />
+          </div>
 
-        {journeyItems.map((item, i) => (
-          <motion.div key={i} className="journey-item" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.6, delay: 0.1 }}>
-            {/* Floating Node */}
-            <div className="journey-node">
-              <div className="journey-node-dot" />
-            </div>
-
-            <div className="journey-card">
-              {/* Card Background Glow */}
-              <div className="journey-card-glow" />
-
-              <div className="journey-year">
-                {item.year}
+          {journeyItems.map((item, i) => (
+            <motion.div key={i} className="journey-item" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.6, delay: 0.1 }}>
+              {/* Floating Node */}
+              <div className="journey-node">
+                <div className="journey-node-dot" />
               </div>
-              <h3 className="journey-title">{item.title}</h3>
-              <div className="journey-company">{item.company}</div>
-              <p className="journey-body">{item.body}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </motion.section>
+
+              <div className="journey-card">
+                {/* Card Background Glow */}
+                <div className="journey-card-glow" />
+
+                <div className="journey-year">
+                  {item.year}
+                </div>
+                <h3 className="journey-title">{item.title}</h3>
+                <div className="journey-company">{item.company}</div>
+                <p className="journey-body">{item.body}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
+    </section>
   );
 }
 
@@ -594,30 +601,32 @@ function Process() {
   const steps = [['01', 'Understand', 'Listen deeply, frame the actual problem, and identify the outcome worth pursuing.'], ['02', 'Plan', 'Turn uncertainty into a clear execution path before momentum creates expensive rework.'], ['03', 'Design', 'Shape interfaces around people, decisions, and the moments that genuinely matter.'], ['04', 'Build', 'Ship careful, scalable code with performance and accessibility built into the work.'], ['05', 'Launch', 'Test, release, learn — then keep improving what the product needs next.']];
   const [active, setActive] = useState(0);
   return (
-    <motion.section ref={ref} style={{ scale, opacity }} className="section process" onMouseEnter={() => setPlayKey(p => p + 1)}>
-      <motion.div className="section-label" {...reveal}>05 / How I build</motion.div>
-      <motion.div className="process-intro" {...reveal}>
-        <motion.h2
-          initial="initial"
-          whileInView="whileInView"
-          viewport={{ once: false, amount: 0.2 }}
-          variants={headingContainer}
-        >
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              Clear thinking.
-            </motion.div>
-          </div>
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              <span>Confident shipping.</span>
-            </motion.div>
-          </div>
-        </motion.h2>
-        <p>Every useful product follows a rhythm. This is mine.</p>
-      </motion.div>
-      <div className="process-list" key={playKey}><motion.div className="process-line-active" initial={{ width: "0%" }} animate={isInView ? { width: "calc(100% - 60px)" } : { width: "0%" }} transition={{ duration: 2, ease: "easeInOut" }} />{steps.map(([number, title, body], i) => <motion.button initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 20 }} transition={{ delay: i * 0.4, duration: 0.5, type: 'spring' }} className={active === i ? 'selected' : ''} onClick={() => setActive(i)} key={title}><span>{number}</span><strong>{title}</strong><div>{body}</div><ChevronRight size={18} /></motion.button>)}</div>
-    </motion.section>
+    <section className="section-wrapper section-bg-process">
+      <motion.section ref={ref} style={{ scale, opacity }} className="section process" onMouseEnter={() => setPlayKey(p => p + 1)}>
+        <motion.div className="section-label" {...reveal}>05 / How I build</motion.div>
+        <motion.div className="process-intro" {...reveal}>
+          <motion.h2
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: false, amount: 0.2 }}
+            variants={headingContainer}
+          >
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                Clear thinking.
+              </motion.div>
+            </div>
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                <span>Confident shipping.</span>
+              </motion.div>
+            </div>
+          </motion.h2>
+          <p>Every useful product follows a rhythm. This is mine.</p>
+        </motion.div>
+        <div className="process-list" key={playKey}><motion.div className="process-line-active" initial={{ width: "0%" }} animate={isInView ? { width: "calc(100% - 60px)" } : { width: "0%" }} transition={{ duration: 2, ease: "easeInOut" }} />{steps.map(([number, title, body], i) => <motion.button initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 20 }} transition={{ delay: i * 0.4, duration: 0.5, type: 'spring' }} className={active === i ? 'selected' : ''} onClick={() => setActive(i)} key={title}><span>{number}</span><strong>{title}</strong><div>{body}</div><ChevronRight size={18} /></motion.button>)}</div>
+      </motion.section>
+    </section>
   );
 }
 
@@ -632,52 +641,54 @@ function Activity() {
     dark: ['#e7e2d9', '#c4dac5', '#9abf9c', '#6a9b6d', '#0f766e'],
   };
   return (
-    <section className="section activity">
-      <motion.div className="activity-card" {...reveal}>
-        <div className="activity-top">
-          <div>
-            <div className="section-label">06 / Builder&apos;s log</div>
-            <motion.h2
-              initial="initial"
-              whileInView="whileInView"
-              viewport={{ once: false, amount: 0.2 }}
-              variants={headingContainer}
-            >
-              <div style={{ display: 'block', overflow: 'hidden' }}>
-                <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-                  Steady craft,
-                </motion.div>
-              </div>
-              <div style={{ display: 'block', overflow: 'hidden' }}>
-                <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-                  <span>visible progress.</span>
-                </motion.div>
-              </div>
-            </motion.h2>
-          </div>
-          <div className="live-dot"><i /> active</div>
-        </div>
-        <div className="activity-grid">
-          <div className="contributions">
-            <div className="contribution-head" style={{ marginBottom: '15px', alignItems: 'center' }}>
-              <span>Contribution rhythm</span>
-              <span style={{ color: 'var(--accent)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '4px 10px', background: 'color-mix(in srgb, var(--accent) 15%, transparent)', borderRadius: '4px', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>Live GitHub data</span>
+    <section className="section-wrapper section-bg-activity">
+      <div className="section activity">
+        <motion.div className="activity-card" {...reveal}>
+          <div className="activity-top">
+            <div>
+              <div className="section-label">06 / Builder&apos;s log</div>
+              <motion.h2
+                initial="initial"
+                whileInView="whileInView"
+                viewport={{ once: false, amount: 0.2 }}
+                variants={headingContainer}
+              >
+                <div style={{ display: 'block', overflow: 'hidden' }}>
+                  <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                    Steady craft,
+                  </motion.div>
+                </div>
+                <div style={{ display: 'block', overflow: 'hidden' }}>
+                  <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                    <span>visible progress.</span>
+                  </motion.div>
+                </div>
+              </motion.h2>
             </div>
-            <div style={{ overflowX: 'auto', paddingBottom: '10px', minHeight: '135px' }}>
-              {mounted ? (
-                <GitHubCalendar username="Sandeepm33" theme={explicitTheme} blockSize={12} blockMargin={4} fontSize={10} />
-              ) : (
-                <div style={{ height: '125px', width: '100%' }} />
-              )}
+            <div className="live-dot"><i /> active</div>
+          </div>
+          <div className="activity-grid">
+            <div className="contributions">
+              <div className="contribution-head" style={{ marginBottom: '15px', alignItems: 'center' }}>
+                <span>Contribution rhythm</span>
+                <span style={{ color: 'var(--accent)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '4px 10px', background: 'color-mix(in srgb, var(--accent) 15%, transparent)', borderRadius: '4px', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>Live GitHub data</span>
+              </div>
+              <div style={{ overflowX: 'auto', paddingBottom: '10px', minHeight: '135px' }}>
+                {mounted ? (
+                  <GitHubCalendar username="Sandeepm33" theme={explicitTheme} blockSize={12} blockMargin={4} fontSize={10} />
+                ) : (
+                  <div style={{ height: '125px', width: '100%' }} />
+                )}
+              </div>
+            </div>
+            <div className="activity-stats">
+              <div><strong>6</strong><small>featured products</small></div>
+              <div><strong>2.1</strong><small>years experience</small></div>
+              <div><strong>4</strong><small>domains explored</small></div>
             </div>
           </div>
-          <div className="activity-stats">
-            <div><strong>6</strong><small>featured products</small></div>
-            <div><strong>2.1</strong><small>years experience</small></div>
-            <div><strong>4</strong><small>domains explored</small></div>
-          </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }
@@ -699,27 +710,82 @@ function Contact() {
     emailjs.send('service_ljeh49e', 'template_saxsbhn', { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message }, 'jjNHbEqnK46HE_ryq').then(() => { setState('success'); setForm({ name: '', email: '', type: '', message: '' }); }, (error) => { setState('error'); setErrors({ submit: 'Failed to send message. Please try again later.' }); console.error(error.text); });
   };
   return (
-    <section id="contact" className="section contact">
-      <motion.div className="contact-copy" {...reveal}>
-        <div className="section-label">07 / Start something</div>
-        <motion.h2
-          initial="initial"
-          whileInView="whileInView"
-          viewport={{ once: false, amount: 0.2 }}
-          variants={headingContainer}
-        >
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              Have an idea?
-            </motion.div>
+    <section id="contact" className="section-wrapper section-bg-contact">
+      <div className="section contact">
+        <motion.div className="contact-copy" {...reveal}>
+          <div className="section-label">07 / Start something</div>
+          <motion.h2
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: false, amount: 0.2 }}
+            variants={headingContainer}
+          >
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                Have an idea?
+              </motion.div>
+            </div>
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                <span>Let&apos;s build it.</span>
+              </motion.div>
+            </div>
+          </motion.h2>
+          <p>Whether you&apos;re building a product, improving an existing application, or solving a complex technical problem, let&apos;s create something meaningful.</p>
+          <div className="contact-links">
+            <a href="mailto:sandeepbhargavmurarishetti@gmail.com">
+              <Mail size={16} /> sandeepbhargavmurarishetti@gmail.com <ArrowUpRight size={14} />
+            </a>
+            <a href="https://wa.me/919963887021" target="_blank" rel="noopener noreferrer">
+              <FaWhatsapp size={16} /> WhatsApp: +91 9963887021 <ArrowUpRight size={14} />
+            </a>
+            <a href="tel:+919963887021">
+              <FaPhoneAlt size={15} /> Call: +91 9963887021 <ArrowUpRight size={14} />
+            </a>
+            <a href="https://www.linkedin.com/in/sandeep-bhargav-murarishetty-742ab1205/" target="_blank" rel="noopener noreferrer">
+              <Linkedin size={15} /> LinkedIn <ArrowUpRight size={14} />
+            </a>
           </div>
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              <span>Let&apos;s build it.</span>
-            </motion.div>
+        </motion.div>
+        <motion.form onSubmit={submit} noValidate {...reveal}>
+          <div className="form-row">
+            <label>
+              Name
+              <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
+              {errors.name && <small>{errors.name}</small>}
+            </label>
+            <label>
+              Email
+              <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" />
+              {errors.email && <small>{errors.email}</small>}
+            </label>
           </div>
-        </motion.h2>
-        <p>Whether you&apos;re building a product, improving an existing application, or solving a complex technical problem, let&apos;s create something meaningful.</p><div className="contact-links"><a href="mailto:sandeepbhargavmurarishetti@gmail.com"><Mail size={16} /> sandeepbhargavmurarishetti@gmail.com <ArrowUpRight size={14} /></a><a href="https://wa.me/919963887021" target="_blank" rel="noopener noreferrer"><FaWhatsapp size={16} /> WhatsApp: +91 9963887021 <ArrowUpRight size={14} /></a><a href="tel:+919963887021"><FaPhoneAlt size={15} /> Call: +91 9963887021 <ArrowUpRight size={14} /></a><a href="https://www.linkedin.com/in/sandeep-bhargav-murarishetty-742ab1205/" target="_blank" rel="noopener noreferrer"><Linkedin size={15} /> LinkedIn <ArrowUpRight size={14} /></a></div></motion.div><motion.form onSubmit={submit} noValidate {...reveal}><div className="form-row"><label>Name<input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" />{errors.name && <small>{errors.name}</small>}</label><label>Email<input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" />{errors.email && <small>{errors.email}</small>}</label></div><label>Project type<select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}><option value="">Select a project type</option><option>New product</option><option>Existing product improvement</option><option>Frontend development</option><option>Full-stack development</option><option>Something else</option></select>{errors.type && <small>{errors.type}</small>}</label><label>Tell me about it<textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="A little context goes a long way..." rows={4} />{errors.message && <small>{errors.message}</small>}</label><button className="button primary submit" disabled={state === 'loading'}>{state === 'loading' ? 'Sending...' : state === 'success' ? 'Message sent — thank you' : 'Start a conversation'} <Send size={15} /></button>{errors.submit && <p className="form-success" style={{ color: '#ff8a79' }}>{errors.submit}</p>}{state === 'success' && <p className="form-success"><Check size={14} /> Your message has been sent successfully. I&apos;ll be in touch soon.</p>}</motion.form></section>);
+          <label>
+            Project type
+            <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
+              <option value="">Select a project type</option>
+              <option>New product</option>
+              <option>Existing product improvement</option>
+              <option>Frontend development</option>
+              <option>Full-stack development</option>
+              <option>Something else</option>
+            </select>
+            {errors.type && <small>{errors.type}</small>}
+          </label>
+          <label>
+            Tell me about it
+            <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="A little context goes a long way..." rows={4} />
+            {errors.message && <small>{errors.message}</small>}
+          </label>
+          <button className="button primary submit" disabled={state === 'loading'}>
+            {state === 'loading' ? 'Sending...' : state === 'success' ? 'Message sent — thank you' : 'Start a conversation'} <Send size={15} />
+          </button>
+          {errors.submit && <p className="form-success" style={{ color: '#ff8a79' }}>{errors.submit}</p>}
+          {state === 'success' && <p className="form-success"><Check size={14} /> Your message has been sent successfully. I&apos;ll be in touch soon.</p>}
+        </motion.form>
+      </div>
+    </section>
+  );
 }
 
 function CaseStudy({ project, close }: { project: typeof projects[number] | null; close: () => void }) { useEffect(() => { const key = (e: KeyboardEvent) => e.key === 'Escape' && close(); window.addEventListener('keydown', key); return () => window.removeEventListener('keydown', key); }, [close]); return <AnimatePresence>{project && <motion.div className="modal-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label={`${project.title} case study`} onMouseDown={close}><motion.article className="case-study" initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 30, opacity: 0 }} onMouseDown={e => e.stopPropagation()}><button className="case-close" onClick={close} aria-label="Close case study"><X size={20} /></button><p className="eyebrow">CASE STUDY / {project.number}</p><h2>{project.title}</h2><ProjectPreview project={project} /><div className="case-grid"><div><small>THE PROBLEM</small><p>{project.problem}</p></div><div><small>THE SOLUTION</small><p>{project.description}</p></div><div><small>ARCHITECTURE</small><p>{project.architecture}</p></div><div><small>RESULT</small><p>{project.result}</p></div></div><div className="case-footer"><div className="tags">{project.tech.map(t => <span key={t}>{t}</span>)}</div><div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>{(project as any).url && <a href={(project as any).url} target="_blank" rel="noopener noreferrer" className="button ghost glass" style={{ fontSize: '11px', display: 'flex', alignItems: 'center', gap: '8px' }}>Visit Live Site <ArrowUpRight size={14} /></a>}<button className="button primary" onClick={close}>Back to work <ArrowDownRight size={16} /></button></div></div></motion.article></motion.div>}</AnimatePresence> }
@@ -729,29 +795,31 @@ function ResumeSection() {
   useEffect(() => { const key = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false); window.addEventListener('keydown', key); return () => window.removeEventListener('keydown', key); }, []);
   return (
     <>
-      <section className="section" style={{ padding: '60px 0', borderTop: '1px solid var(--line)', textAlign: 'center' }}>
-        <p style={{ color: 'var(--muted)', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px' }}>08 / Full History</p>
-        <motion.h2
-          initial="initial"
-          whileInView="whileInView"
-          viewport={{ once: false, amount: 0.2 }}
-          variants={headingContainer}
-          style={{ margin: '0 0 30px' }}
-        >
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              View my
-            </motion.div>
-          </div>
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
-              <span>full experience.</span>
-            </motion.div>
-          </div>
-        </motion.h2>
-        <button className="button ghost glass" onClick={() => setOpen(true)} style={{ fontSize: '12px', padding: '16px 24px' }}>
-          Preview Resume <ArrowUpRight size={16} />
-        </button>
+      <section className="section-wrapper section-bg-resume">
+        <div className="section resume-section-inner" style={{ padding: '60px 0', textAlign: 'center' }}>
+          <p style={{ color: 'var(--muted)', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px' }}>08 / Full History</p>
+          <motion.h2
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: false, amount: 0.2 }}
+            variants={headingContainer}
+            style={{ margin: '0 0 30px' }}
+          >
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                View my
+              </motion.div>
+            </div>
+            <div style={{ display: 'block', overflow: 'hidden' }}>
+              <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+                <span>full experience.</span>
+              </motion.div>
+            </div>
+          </motion.h2>
+          <button className="button ghost glass" onClick={() => setOpen(true)} style={{ fontSize: '12px', padding: '16px 24px' }}>
+            Preview Resume <ArrowUpRight size={16} />
+          </button>
+        </div>
       </section>
 
       <AnimatePresence>
@@ -777,7 +845,17 @@ function ResumeSection() {
   )
 }
 
-function Footer() { return <footer><a className="brand" href="#home">SANDEEP<span>.DEV</span></a><p>Designed & engineered with intention.</p><span>© {new Date().getFullYear()} Sandeep Bhargav</span></footer> }
+function Footer() {
+  return (
+    <footer className="section-wrapper section-bg-footer">
+      <div className="footer-inner">
+        <a className="brand" href="#home">SANDEEP<span>.DEV</span></a>
+        <p>Designed & engineered with intention.</p>
+        <span>© {new Date().getFullYear()} Sandeep Bhargav</span>
+      </div>
+    </footer>
+  );
+}
 
 export default function Home() {
   const [selected, setSelected] = useState<typeof projects[number] | null>(null);

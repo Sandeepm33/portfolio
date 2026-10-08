@@ -71,6 +71,234 @@ button {
   z-index: 1;
 }
 
+/* Full width section wrappers and distinct section background themes */
+.section-wrapper {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 1. Hero Section Background */
+.section-bg-hero {
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* 2. Intro / About Section Background (Warm Editorial Ivory) */
+.section-bg-about {
+  background: #faf8f5;
+  background-image: radial-gradient(rgba(15, 118, 110, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border-top: 1px solid #eef0ea;
+  border-bottom: 1px solid #eef0ea;
+  padding: 60px 0;
+}
+
+/* 3. Tech Stack Section Background (Cool Mint / Cyan Mist) */
+.section-bg-tech {
+  background: linear-gradient(135deg, #f0fdfa 0%, #e6f4f1 100%);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+  padding: 60px 0;
+}
+
+/* 4. Projects Section Background (Sleek Slate Contrast) */
+.section-bg-projects {
+  background: #f4f6f8;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.015) 1px, transparent 1px);
+  background-size: 32px 32px;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 60px 0;
+}
+
+/* 5. Experience / Journey Section Background (Warm Parchment / Ivory) */
+.section-bg-experience {
+  background: #fbf8f3;
+  border-bottom: 1px solid #ede8e0;
+  padding: 60px 0;
+}
+
+/* 6. Process Section Background (Mint Cyan Frosted Glow) */
+.section-bg-process {
+  background: linear-gradient(180deg, #eefaf6 0%, #f4fbf9 100%);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 60px 0;
+}
+
+/* 7. Activity / Builder's Log Section Background (Light Sky/Teal Tint Theme) */
+.section-bg-activity {
+  background: linear-gradient(180deg, #f0f9ff 0%, #eef7f6 100%);
+  color: var(--text);
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 60px 0;
+}
+
+.section-bg-activity h2 {
+  color: var(--text);
+}
+
+.section-bg-activity h2 span {
+  color: var(--muted);
+}
+
+.section-bg-activity .section-label {
+  color: var(--accent);
+}
+
+.section-bg-activity .activity-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
+  box-shadow: 0 12px 36px rgba(15, 118, 110, 0.06);
+  border-radius: 20px;
+}
+
+/* 8. Contact Section Background (Light Emerald & Mint Soft Gradient Theme) */
+.section-bg-contact {
+  background: linear-gradient(135deg, #f9f9f9 0%, #f4fbf9 50%, #eef6fc 100%);
+  color: var(--text);
+  border-top: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  padding: 80px 0;
+}
+
+.section-bg-contact h2 {
+  color: var(--text);
+}
+
+.section-bg-contact h2 span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.section-bg-contact .section-label {
+  color: var(--accent);
+}
+
+.section-bg-contact p {
+  color: var(--muted);
+}
+
+.contact-links {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.contact-links a,
+.section-bg-contact .contact-links a {
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, #e2e8f0);
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.06);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.contact-links a:hover,
+.section-bg-contact .contact-links a:hover {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.contact-links a svg,
+.section-bg-contact .contact-links a svg {
+  transition: transform 0.25s ease;
+}
+
+.contact-links a:hover svg,
+.section-bg-contact .contact-links a:hover svg {
+  transform: scale(1.1);
+}
+
+.section-bg-contact form {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, #e2e8f0);
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 16px 40px rgba(15, 118, 110, 0.08);
+}
+
+.section-bg-contact form label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.section-bg-contact form input,
+.section-bg-contact form select,
+.section-bg-contact form textarea {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.section-bg-contact form input::placeholder,
+.section-bg-contact form textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.section-bg-contact form input:focus,
+.section-bg-contact form select:focus,
+.section-bg-contact form textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* 9. Resume Section Background */
+.section-bg-resume {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 40px 0;
+}
+
+/* 10. Footer Section Background */
+.section-bg-footer {
+  background: #0b0f17;
+  color: #94a3b8;
+  border-top: 1px solid #1e293b;
+  padding: 40px 0;
+}
+
+.section-bg-footer .footer-inner {
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.section-bg-footer .brand {
+  color: #ffffff;
+}
+
+.section-bg-footer .brand span {
+  color: #2dd4bf;
+}
+
 .section-label {
   color: var(--accent);
   font-family: var(--mono);
