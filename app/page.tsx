@@ -162,7 +162,7 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
             <span className="status-ping" />
           </span>
           <span className="brand-name">
-            sandeep bhargav <span className="brand-last">murarishetty</span>
+            SANDEEP BHARGAV <span className="brand-last">MURARISHETTY</span>
           </span>
         </a>
 

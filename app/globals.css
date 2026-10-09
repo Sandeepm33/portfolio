@@ -471,7 +471,8 @@ h1 em {
 .brand-name {
   font-size: 13.5px;
   font-weight: 700;
-  text-transform: lowercase;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .brand-last {
