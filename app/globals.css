@@ -4254,9 +4254,9 @@ footer p {
   border: 1px solid #ccfbf1;
 }
 
-.hero-tech-icon.next-icon {
-  background: #111827;
-  border: 1px solid #374151;
+.hero-tech-icon.node-icon {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
 }
 
 .hero-tech-icon.ts-icon {
@@ -4274,16 +4274,9 @@ footer p {
   line-height: 1;
 }
 
-.hero-tech-icon.js-icon {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-}
-
-.hero-tech-icon.js-icon .js-box {
-  color: #22c55e;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
+.hero-tech-icon.next-icon {
+  background: #0f172a;
+  border: 1px solid #334155;
 }
 
 .hero-tech-icon.tailwind-icon {
@@ -4790,5 +4783,400 @@ footer p {
 
   .apple-preloader-bottom-group {
     max-width: 300px;
+  }
+}
+
+/* ==========================================================================
+   INNOVATIVE CONTACT SECTION STYLES
+   ========================================================================== */
+
+.contact-innovative-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 40px;
+  align-items: start;
+  padding-top: 20px;
+  padding-bottom: 60px;
+}
+
+.contact-info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-headline {
+  font-size: clamp(32px, 4vw, 48px);
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.contact-subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* Action Cards */
+.contact-action-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.contact-card.glass-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--accent) 15%, #e2e8f0);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.contact-card.glass-card:hover {
+  background: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 8px 30px color-mix(in srgb, var(--accent) 15%, transparent);
+  transform: translateY(-2px);
+}
+
+.card-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.card-icon-wrap.whatsapp {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.card-icon-wrap.linkedin {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.card-value {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copy-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(15, 118, 110, 0.08);
+  border: 1px solid rgba(15, 118, 110, 0.15);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-action-btn:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.copy-action-btn .copied {
+  color: #10b981;
+}
+
+.card-arrow {
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+.contact-card.glass-card:hover .card-arrow {
+  transform: translate(2px, -2px);
+  color: var(--accent);
+}
+
+.reply-guarantee-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  width: fit-content;
+}
+
+.ping-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+/* Form Container Card */
+.contact-form-col {
+  position: relative;
+}
+
+.form-card-glow-bg {
+  position: absolute;
+  inset: -10px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 18%, transparent) 0%, transparent 70%);
+  filter: blur(40px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.innovative-contact-form.glass-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 28px;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, rgba(229, 231, 235, 0.8));
+  box-shadow: 0 20px 50px -15px rgba(15, 118, 110, 0.12), 0 4px 20px rgba(0, 0, 0, 0.03);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.field-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-count {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.input-wrap input,
+.input-wrap textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid #e2e8f0;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.input-wrap input:focus,
+.input-wrap textarea:focus {
+  background: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent), 0 4px 12px rgba(15, 118, 110, 0.08);
+}
+
+.input-wrap input.has-error,
+.input-wrap textarea.has-error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.field-error-msg {
+  font-size: 11px;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Project Chips Grid */
+.project-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.project-chip-btn {
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  outline: none;
+}
+
+.project-chip-btn:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 40%, #e2e8f0);
+}
+
+.project-chip-btn.active {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.chip-active-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(15, 118, 110, 0.12);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  z-index: 0;
+}
+
+.chip-text {
+  position: relative;
+  z-index: 1;
+}
+
+/* Submit Row */
+.form-submit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.innovative-submit-btn {
+  position: relative;
+  width: 100%;
+  padding: 14px 28px;
+  border-radius: 16px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--accent) 35%, transparent);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.innovative-submit-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 88%, #000);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.innovative-submit-btn .btn-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.innovative-submit-btn .send-icon {
+  transition: transform 0.25s ease;
+}
+
+.innovative-submit-btn:hover .send-icon {
+  transform: translate(3px, -3px);
+}
+
+.innovative-submit-btn.is-success {
+  background: #10b981;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+}
+
+.form-submit-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #10b981;
+  background: #ecfdf5;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #a7f3d0;
+}
+
+.form-submit-error {
+  font-size: 12.5px;
+  color: #ef4444;
+  background: #fef2f2;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #fecaca;
+}
+
+@media (max-width: 900px) {
+  .contact-innovative-wrap {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 540px) {
+  .form-inputs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .innovative-contact-form.glass-card {
+    padding: 20px;
+    border-radius: 20px;
   }
 }

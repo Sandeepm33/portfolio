@@ -866,31 +866,54 @@ function Activity() {
 }
 
 function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', type: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', type: '⚡ New Product', message: '' });
   const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const projectTypes = [
+    { id: '⚡ New Product', label: '⚡ New Product' },
+    { id: '🎨 Frontend UI/UX', label: '🎨 Frontend UI/UX' },
+    { id: '🚀 Full-Stack App', label: '🚀 Full-Stack App' },
+    { id: '🛠️ Improvement', label: '🛠️ Improvement' },
+    { id: '💡 Other Concept', label: '💡 Other Concept' },
+  ];
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const next: Record<string, string> = {};
     if (!form.name.trim()) next.name = 'Please add your name.';
     if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'Enter a valid email address.';
-    if (!form.type) next.type = 'Choose a project type.';
+    if (!form.type) next.type = 'Choose a project category.';
     if (form.message.trim().length < 12) next.message = 'Tell me a little more (12 characters minimum).';
     setErrors(next);
     if (Object.keys(next).length) { setState('error'); return; }
     setState('loading');
-    emailjs.send('service_ljeh49e', 'template_saxsbhn', { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message }, 'jjNHbEqnK46HE_ryq').then(() => { setState('success'); setForm({ name: '', email: '', type: '', message: '' }); }, (error) => { setState('error'); setErrors({ submit: 'Failed to send message. Please try again later.' }); console.error(error.text); });
+    emailjs.send(
+      'service_ljeh49e',
+      'template_saxsbhn',
+      { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message },
+      'jjNHbEqnK46HE_ryq'
+    ).then(() => {
+      setState('success');
+      setForm({ name: '', email: '', type: '⚡ New Product', message: '' });
+    }, (error) => {
+      setState('error');
+      setErrors({ submit: 'Failed to send message. Please try again later.' });
+      console.error(error.text);
+    });
   };
+
   return (
     <section id="contact" className="section-wrapper section-bg-contact">
-      <div className="section contact">
-        <motion.div className="contact-copy" {...reveal}>
+      <div className="section contact-innovative-wrap">
+        {/* Left Side Info & One-click Cards */}
+        <motion.div className="contact-info-col" {...reveal}>
           <div className="section-label">07 / Start something</div>
           <motion.h2
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: false, amount: 0.2 }}
             variants={headingContainer}
+            className="contact-headline"
           >
             <div style={{ display: 'block', overflow: 'hidden' }}>
               <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
@@ -903,58 +926,165 @@ function Contact() {
               </motion.div>
             </div>
           </motion.h2>
-          <p>Whether you&apos;re building a product, improving an existing application, or solving a complex technical problem, let&apos;s create something meaningful.</p>
-          <div className="contact-links">
-            <a href="mailto:sandeepbhargavmurarishetti@gmail.com">
-              <Mail size={16} /> sandeepbhargavmurarishetti@gmail.com <ArrowUpRight size={14} />
+
+          <p className="contact-subtitle">
+            Whether you&apos;re launching a new product, upgrading an existing application, or needing high-impact full-stack engineering—let&apos;s collaborate.
+          </p>
+
+          {/* Quick Contact Action Cards */}
+          <div className="contact-action-cards">
+            {/* Direct Email Card */}
+            <a href="mailto:sandeepbhargavmurarishetti@gmail.com" className="contact-card glass-card">
+              <div className="card-icon-wrap email">
+                <Mail size={18} />
+              </div>
+              <div className="card-content">
+                <span className="card-label">Email Address</span>
+                <span className="card-value">sandeepbhargavmurarishetti@gmail.com</span>
+              </div>
+              <ArrowUpRight size={16} className="card-arrow" />
             </a>
-            <a href="https://wa.me/919963887021" target="_blank" rel="noopener noreferrer">
-              <FaWhatsapp size={16} /> WhatsApp: +91 9963887021 <ArrowUpRight size={14} />
+
+            {/* Direct WhatsApp Card */}
+            <a href="https://wa.me/919963887021" target="_blank" rel="noopener noreferrer" className="contact-card glass-card">
+              <div className="card-icon-wrap whatsapp">
+                <FaWhatsapp size={18} />
+              </div>
+              <div className="card-content">
+                <span className="card-label">Instant Chat</span>
+                <span className="card-value">+91 9963887021</span>
+              </div>
+              <ArrowUpRight size={16} className="card-arrow" />
             </a>
-            <a href="tel:+919963887021">
-              <FaPhoneAlt size={15} /> Call: +91 9963887021 <ArrowUpRight size={14} />
+
+            {/* LinkedIn Card */}
+            <a href="https://www.linkedin.com/in/sandeep-bhargav-murarishetty-742ab1205/" target="_blank" rel="noopener noreferrer" className="contact-card glass-card">
+              <div className="card-icon-wrap linkedin">
+                <Linkedin size={18} />
+              </div>
+              <div className="card-content">
+                <span className="card-label">Professional Profile</span>
+                <span className="card-value">LinkedIn / Sandeep Bhargav</span>
+              </div>
+              <ArrowUpRight size={16} className="card-arrow" />
             </a>
-            <a href="https://www.linkedin.com/in/sandeep-bhargav-murarishetty-742ab1205/" target="_blank" rel="noopener noreferrer">
-              <Linkedin size={15} /> LinkedIn <ArrowUpRight size={14} />
-            </a>
+          </div>
+
+          {/* Response Speed Guarantee */}
+          <div className="reply-guarantee-badge">
+            <span className="ping-dot" /> Typical response time: <strong>under 2 hours</strong>
           </div>
         </motion.div>
-        <motion.form onSubmit={submit} noValidate {...reveal}>
-          <div className="form-row">
-            <label>
-              Name
-              <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
-              {errors.name && <small>{errors.name}</small>}
-            </label>
-            <label>
-              Email
-              <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" />
-              {errors.email && <small>{errors.email}</small>}
-            </label>
-          </div>
-          <label>
-            Project type
-            <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
-              <option value="">Select a project type</option>
-              <option>New product</option>
-              <option>Existing product improvement</option>
-              <option>Frontend development</option>
-              <option>Full-stack development</option>
-              <option>Something else</option>
-            </select>
-            {errors.type && <small>{errors.type}</small>}
-          </label>
-          <label>
-            Tell me about it
-            <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="A little context goes a long way..." rows={4} />
-            {errors.message && <small>{errors.message}</small>}
-          </label>
-          <button className="button primary submit" disabled={state === 'loading'}>
-            {state === 'loading' ? 'Sending...' : state === 'success' ? 'Message sent — thank you' : 'Start a conversation'} <Send size={15} />
-          </button>
-          {errors.submit && <p className="form-success" style={{ color: '#ff8a79' }}>{errors.submit}</p>}
-          {state === 'success' && <p className="form-success"><Check size={14} /> Your message has been sent successfully. I&apos;ll be in touch soon.</p>}
-        </motion.form>
+
+        {/* Right Side Innovative Form Card */}
+        <motion.div className="contact-form-col" {...reveal}>
+          <div className="form-card-glow-bg" />
+          <form onSubmit={submit} noValidate className="innovative-contact-form glass-card">
+
+            {/* Input Row */}
+            <div className="form-inputs-grid">
+              <div className="form-field-group">
+                <label className="field-label">Your Name</label>
+                <div className="input-wrap">
+                  <input
+                    value={form.name}
+                    onChange={e => setForm({ ...form, name: e.target.value })}
+                    placeholder="Sandeep Bhargav"
+                    className={errors.name ? 'has-error' : ''}
+                  />
+                </div>
+                {errors.name && <span className="field-error-msg">{errors.name}</span>}
+              </div>
+
+              <div className="form-field-group">
+                <label className="field-label">Your Email</label>
+                <div className="input-wrap">
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={e => setForm({ ...form, email: e.target.value })}
+                    placeholder="you@company.com"
+                    className={errors.email ? 'has-error' : ''}
+                  />
+                </div>
+                {errors.email && <span className="field-error-msg">{errors.email}</span>}
+              </div>
+            </div>
+
+            {/* Interactive Project Type Chip Selector */}
+            <div className="form-field-group">
+              <label className="field-label">Project Category</label>
+              <div className="project-chips-grid">
+                {projectTypes.map((type) => {
+                  const isSelected = form.type === type.id;
+                  return (
+                    <button
+                      type="button"
+                      key={type.id}
+                      onClick={() => setForm({ ...form, type: type.id })}
+                      className={`project-chip-btn ${isSelected ? 'active' : ''}`}
+                    >
+                      {isSelected && (
+                        <motion.span
+                          layoutId="selectedChipBg"
+                          className="chip-active-bg"
+                          transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                        />
+                      )}
+                      <span className="chip-text">{type.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {errors.type && <span className="field-error-msg">{errors.type}</span>}
+            </div>
+
+            {/* Message Area */}
+            <div className="form-field-group">
+              <div className="field-label-row">
+                <label className="field-label">Tell me about your project</label>
+                <span className="char-count">{form.message.length} chars</span>
+              </div>
+              <div className="input-wrap">
+                <textarea
+                  value={form.message}
+                  onChange={e => setForm({ ...form, message: e.target.value })}
+                  placeholder="Share details on your goal, timeline, tech stack, or scope..."
+                  rows={4}
+                  className={errors.message ? 'has-error' : ''}
+                />
+              </div>
+              {errors.message && <span className="field-error-msg">{errors.message}</span>}
+            </div>
+
+            {/* Submit Button & Feedback */}
+            <div className="form-submit-row">
+              <button
+                type="submit"
+                className={`innovative-submit-btn ${state === 'loading' ? 'is-loading' : ''} ${state === 'success' ? 'is-success' : ''}`}
+                disabled={state === 'loading'}
+              >
+                <span className="btn-content">
+                  {state === 'loading' ? (
+                    <>Sending message...</>
+                  ) : state === 'success' ? (
+                    <><Check size={18} /> Message Sent!</>
+                  ) : (
+                    <>Start a conversation <Send size={16} className="send-icon" /></>
+                  )}
+                </span>
+              </button>
+
+              {errors.submit && <p className="form-submit-error">{errors.submit}</p>}
+              {state === 'success' && (
+                <p className="form-submit-success">
+                  <Check size={15} /> Thank you! Your message was sent successfully. I will get back to you shortly.
+                </p>
+              )}
+            </div>
+
+          </form>
+        </motion.div>
       </div>
     </section>
   );
