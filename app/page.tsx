@@ -77,6 +77,12 @@ function Cursor() { const x = useMotionValue(-50); const y = useMotionValue(-50)
 function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
   const [open, setOpen] = useState(false);
   const [isMac, setIsMac] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+
+  const { scrollYProgress } = useScroll();
+  const progressScale = useSpring(scrollYProgress, { stiffness: 120, damping: 25, restDelta: 0.001 });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -84,14 +90,109 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
     }
   }, []);
 
-  const links = ['Home', 'About', 'Skills', 'Projects', 'Experience', 'Contact'];
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 30);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const sectionIds = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-20% 0px -50% 0px', threshold: 0.1 }
+    );
+
+    sections.forEach(s => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  const links = [
+    { id: 'home', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    setOpen(false);
+    setActiveSection(id);
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -90;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <header className="nav-wrap">
-      <nav className="nav glass" aria-label="Main navigation">
-        <a className="brand" href="#home">sandeep bhargav <span className="brand-last">murarishetty</span></a>
-        <div className="nav-links">
-          {links.map(l => <a key={l} href={`#${l.toLowerCase()}`}>{l}</a>)}
+    <header className={`nav-wrap ${isScrolled ? 'is-scrolled' : ''}`}>
+      <motion.nav
+        className="nav glass dynamic-pill"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        aria-label="Main navigation"
+      >
+        {/* Scroll Progress Line */}
+        <motion.div
+          className="nav-progress-indicator"
+          style={{ scaleX: progressScale }}
+        />
+
+        {/* Brand Logo with Live Status Indicator */}
+        <a className="brand-link" href="#home" onClick={(e) => scrollToSection(e, 'home')}>
+          <span className="brand-status-dot" title="Available for opportunities">
+            <span className="status-ping" />
+          </span>
+          <span className="brand-name">
+            sandeep bhargav <span className="brand-last">murarishetty</span>
+          </span>
+        </a>
+
+        {/* Dynamic Floating Links */}
+        <div className="nav-links" onMouseLeave={() => setHoveredLink(null)}>
+          {links.map((link) => {
+            const isActive = activeSection === link.id;
+            const isHovered = hoveredLink === link.id;
+            return (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                onClick={(e) => scrollToSection(e, link.id)}
+                onMouseEnter={() => setHoveredLink(link.id)}
+                className={`nav-link-item ${isActive ? 'active' : ''}`}
+              >
+                {(isActive || isHovered) && (
+                  <motion.span
+                    layoutId="activeNavPill"
+                    className={`nav-pill-bg ${isActive ? 'is-active-pill' : 'is-hover-pill'}`}
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  />
+                )}
+                <span className="nav-link-text">{link.label}</span>
+              </a>
+            );
+          })}
         </div>
+
+        {/* Actions (Search, Resume & Mobile Menu) */}
         <div className="nav-actions">
           <button
             onClick={onOpenSearch}
@@ -103,18 +204,89 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
             <kbd className="search-kbd">{isMac ? '⌘K' : 'Ctrl+K'}</kbd>
           </button>
 
-          <a className="button primary" style={{ padding: '8px 14px', fontSize: '12px', gap: '6px' }} href="/images/Sandeep%20bhargav%20_resume.pdf" target="_blank" rel="noopener noreferrer">
-            <Download size={14} /> Resume
+          <a
+            className="resume-pill-btn"
+            href="/images/Sandeep%20bhargav%20_resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Download size={14} /> <span>Resume</span>
           </a>
-          <button aria-label="Open menu" className="icon-button mobile-menu" onClick={() => setOpen(!open)}>
-            {open ? <X size={18} /> : <Menu size={18} />}
+
+          <button
+            aria-label="Toggle menu"
+            className="icon-button mobile-menu-btn"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
-      </nav>
+      </motion.nav>
+
+      {/* Mobile Animated Overlay Drawer */}
       <AnimatePresence>
         {open && (
-          <motion.div className="mobile-nav glass" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-            {links.map(l => <a key={l} onClick={() => setOpen(false)} href={`#${l.toLowerCase()}`}>{l}</a>)}
+          <motion.div
+            className="mobile-nav-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpen(false)}
+          >
+            <motion.div
+              className="mobile-nav-card glass"
+              initial={{ opacity: 0, y: -20, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.96 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mobile-nav-header">
+                <div className="mobile-status-badge">
+                  <span className="status-ping" /> Available for opportunities
+                </div>
+                <button
+                  className="mobile-close-btn"
+                  onClick={() => setOpen(false)}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="mobile-links-list">
+                {links.map((link, idx) => (
+                  <motion.a
+                    key={link.id}
+                    href={`#${link.id}`}
+                    onClick={(e) => scrollToSection(e, link.id)}
+                    className={`mobile-link-item ${activeSection === link.id ? 'active' : ''}`}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.04 + 0.05 }}
+                  >
+                    <span>{link.label}</span>
+                    <ChevronRight size={16} className="mobile-link-arrow" />
+                  </motion.a>
+                ))}
+              </div>
+
+              <div className="mobile-nav-actions">
+                <button
+                  onClick={() => { setOpen(false); onOpenSearch(); }}
+                  className="mobile-action-btn search"
+                >
+                  <Search size={15} /> Search portfolio <kbd>{isMac ? '⌘K' : 'Ctrl+K'}</kbd>
+                </button>
+                <a
+                  className="mobile-action-btn resume"
+                  href="/images/Sandeep%20bhargav%20_resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Download size={15} /> Download Resume
+                </a>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -165,14 +337,14 @@ function Hero() {
             <div className="hero-tech-icon react-icon">
               <svg width="26" height="26" viewBox="-10.5 -9.45 21 18.9" fill="none"><circle cx="0" cy="0" r="2" fill="#0ea5e9"></circle><g stroke="#0ea5e9" strokeWidth="1" fill="none"><ellipse rx="10" ry="4.5"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(60)"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(120)"></ellipse></g></svg>
             </div>
-            <div className="hero-tech-icon next-icon">
-              <svg width="22" height="22" viewBox="0 0 180 180" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M90 180c49.706 0 90-40.294 90-90S139.706 0 90 0 0 40.294 0 90s40.294 90 90 90zm-17.65-119.57v75.148l47.9-72.336L90 0 72.35 60.43zm36.08 72.335v-51.52L135 152.09c8.293-10.22 13.567-23.23 14.526-37.495l-41.096-54.16z" fill="#fff" /></svg>
+            <div className="hero-tech-icon node-icon">
+              <SiNodedotjs size={24} color="#339933" />
             </div>
             <div className="hero-tech-icon ts-icon">
               <div className="ts-box">TS</div>
             </div>
-            <div className="hero-tech-icon js-icon">
-              <div className="js-box">JS</div>
+            <div className="hero-tech-icon next-icon">
+              <SiNextdotjs size={22} color="#ffffff" />
             </div>
             <div className="hero-tech-icon tailwind-icon">
               <svg width="22" height="22" viewBox="0 0 54 33" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z" fill="#06b6d4" /></svg>
