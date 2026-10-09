@@ -298,11 +298,27 @@ function CodePanel() { return <div className="workspace-wrap"><div className="wo
 
 import { Rocket, Users, ArrowRight } from 'lucide-react';
 
+const heroRoles = [
+  { accent: 'React Full Stack', text: 'Developer' },
+  { accent: 'Next.js & Node.js', text: 'Specialist' },
+  { accent: 'Scalable SaaS', text: 'Architect' },
+  { accent: 'AI-Accelerated', text: 'Engineer' },
+];
+
 function Hero() {
   const { scrollY } = useScroll();
   const yText = useTransform(scrollY, [0, 800], [0, 150]);
   const scalePortrait = useTransform(scrollY, [0, 800], [1, 1.05]);
   const yPortrait = useTransform(scrollY, [0, 800], [0, 100]);
+
+  const [roleIndex, setRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % heroRoles.length);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section id="home" className="hero-section hero-section-wrap section-bg-hero">
@@ -318,22 +334,66 @@ function Hero() {
 
       <div className="section hero-grid-container">
         <motion.div style={{ y: yText }} className="hero-text-col">
-          <div className="hero-badge">
+          <motion.div
+            initial={{ opacity: 0, y: 15, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="hero-badge"
+          >
             <span className="hero-badge-dot" /> Available for opportunities
+          </motion.div>
+
+          <h1 className="hero-title" style={{ overflow: 'hidden', display: 'flex', flexWrap: 'wrap', gap: '0 0.28em' }}>
+            <motion.span
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              style={{ display: 'inline-block' }}
+            >
+              Sandeep
+            </motion.span>{' '}
+            <motion.span
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+              className="accent-text text-shimmer"
+              style={{ display: 'inline-block' }}
+            >
+              Bhargav
+            </motion.span>
+          </h1>
+
+          <div className="hero-subtitle-wrapper">
+            <AnimatePresence mode="wait">
+              <motion.h2
+                key={roleIndex}
+                initial={{ y: 24, opacity: 0, filter: 'blur(4px)' }}
+                animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                exit={{ y: -24, opacity: 0, filter: 'blur(4px)' }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="hero-subtitle"
+              >
+                <span className="accent-text">{heroRoles[roleIndex].accent}</span>{' '}
+                <span>{heroRoles[roleIndex].text}</span>
+              </motion.h2>
+            </AnimatePresence>
           </div>
 
-          <h1 className="hero-title">
-            Sandeep <span className="accent-text">Bhargav</span>
-          </h1>
-          <h2 className="hero-subtitle">
-            <span className="accent-text">React Full Stack</span> Developer
-          </h2>
-
-          <p className="hero-desc">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+            className="hero-desc"
+          >
             React Full Stack Developer with 2.1+ years of experience building scalable, production web applications using React, Next.js, Node.js, and TypeScript. Delivers user-centric platforms across SaaS collaboration, recruitment, and e-commerce domains for clients in Australia and India. AI-accelerated engineering using Claude (via Google Antigravity).
-          </p>
+          </motion.p>
 
-          <div className="hero-tech-icons">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.65 }}
+            className="hero-tech-icons"
+          >
             <div className="hero-tech-icon react-icon">
               <svg width="26" height="26" viewBox="-10.5 -9.45 21 18.9" fill="none"><circle cx="0" cy="0" r="2" fill="#0ea5e9"></circle><g stroke="#0ea5e9" strokeWidth="1" fill="none"><ellipse rx="10" ry="4.5"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(60)"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(120)"></ellipse></g></svg>
             </div>
@@ -352,13 +412,18 @@ function Hero() {
             <div className="hero-tech-icon db-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /></svg>
             </div>
-          </div>
+          </motion.div>
 
           <style dangerouslySetInnerHTML={{
             __html: `
               .magnetic-clear { background: none; border: none; padding: 0; margin: 0; cursor: pointer; outline: none; border-radius: 10px; display: inline-flex; }
             `}} />
-          <div className="hero-cta-buttons">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="hero-cta-buttons"
+          >
             <Magnetic className="magnetic-clear" onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}>
               <span className="hero-btn-primary">
                 <Rocket size={18} fill="#fff" /> View My Work <ArrowRight size={18} />
@@ -369,7 +434,7 @@ function Hero() {
                 <Users size={18} /> Let's Work Together <ArrowRight size={18} />
               </span>
             </Magnetic>
-          </div>
+          </motion.div>
         </motion.div>
 
         <motion.div className="hero-portrait-col">

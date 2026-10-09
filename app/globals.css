@@ -4214,14 +4214,51 @@ footer p {
   color: var(--accent);
 }
 
+@keyframes textShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.text-shimmer {
+  background: linear-gradient(115deg,
+      #0f766e 0%,
+      #0d9488 25%,
+      #2dd4bf 50%,
+      #0d9488 75%,
+      #0f766e 100%);
+  background-size: 200% auto;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  animation: textShimmer 5s ease-in-out infinite;
+}
+
+.hero-subtitle-wrapper {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
 .hero-subtitle {
   font-size: clamp(22px, 3.2vw, 42px);
   font-weight: 800;
-  margin: 0 0 24px;
+  margin: 0;
   color: #111827;
   text-transform: none;
   letter-spacing: -0.02em;
   font-family: var(--font-display);
+  white-space: nowrap;
 }
 
 .hero-desc {
