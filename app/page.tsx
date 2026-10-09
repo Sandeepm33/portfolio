@@ -789,10 +789,9 @@ function Experience() {
         <motion.div className="section-label" {...reveal}>04 / My Journey</motion.div>
         <motion.h2 initial="initial" whileInView="whileInView" viewport={{ once: false, amount: 0.2 }} variants={headingContainer}>
           <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>My</motion.div>
-          </div>
-          <div style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.div style={{ display: 'inline-block' }} variants={headingLine}><span>journey.</span></motion.div>
+            <motion.div style={{ display: 'inline-block' }} variants={headingLine}>
+              My journey.
+            </motion.div>
           </div>
         </motion.h2>
 
