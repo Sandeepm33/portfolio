@@ -343,7 +343,7 @@ function Hero() {
             <span className="hero-badge-dot" /> Available for opportunities
           </motion.div>
 
-          <h1 className="hero-title" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'baseline', gap: '0.28em', whiteSpace: 'nowrap' }}>
+          <h1 className="hero-title" style={{ display: 'flex', flexWrap: 'wrap', gap: '0 0.28em' }}>
             <motion.span
               initial={{ y: 28, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}

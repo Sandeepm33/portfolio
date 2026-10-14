@@ -4201,7 +4201,7 @@ footer p {
 }
 
 .hero-title {
-  font-size: clamp(32px, 4.6vw, 76px);
+  font-size: clamp(38px, 5.5vw, 84px);
   line-height: 1.16;
   font-weight: 900;
   margin: 0 0 8px;
@@ -4209,7 +4209,6 @@ footer p {
   color: #111827;
   font-family: var(--font-display);
   padding-bottom: 0.08em;
-  white-space: nowrap;
 }
 
 .hero-title .accent-text,
@@ -4645,7 +4644,7 @@ footer p {
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: clamp(24px, 7.5vw, 32px);
+    font-size: 34px;
   }
 
   .hero-subtitle {
