@@ -343,21 +343,21 @@ function Hero() {
             <span className="hero-badge-dot" /> Available for opportunities
           </motion.div>
 
-          <h1 className="hero-title" style={{ overflow: 'hidden', display: 'flex', flexWrap: 'wrap', gap: '0 0.28em' }}>
+          <h1 className="hero-title" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'baseline', gap: '0.28em', whiteSpace: 'nowrap' }}>
             <motion.span
-              initial={{ y: '100%', opacity: 0 }}
+              initial={{ y: 28, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              style={{ display: 'inline-block' }}
+              style={{ display: 'inline-block', paddingBottom: '0.08em' }}
             >
               Sandeep
             </motion.span>{' '}
             <motion.span
-              initial={{ y: '100%', opacity: 0 }}
+              initial={{ y: 28, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
               className="accent-text text-shimmer"
-              style={{ display: 'inline-block' }}
+              style={{ display: 'inline-block', paddingBottom: '0.08em' }}
             >
               Bhargav
             </motion.span>
