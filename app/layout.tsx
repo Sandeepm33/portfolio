@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://portfolio-seven-ivory-88.vercel.app'),
   title: {
-    default: 'Sandeep Bhargav | React Developer Portfolio',
+    default: 'Sandeep Bhargav | React & Frontend Developer Portfolio',
     template: '%s | Sandeep Bhargav',
   },
   icons: {
@@ -27,11 +27,14 @@ export const metadata: Metadata = {
     ],
     shortcut: ['/images/sb.png'],
   },
-  description: "Explore Sandeep Bhargav's developer portfolio featuring React.js, Next.js, TypeScript, responsive web applications, and frontend projects.",
+  description: "Explore Sandeep Bhargav's frontend developer portfolio featuring React.js, Next.js, TypeScript, responsive web development, and real-world projects.",
   keywords: [
-    'Frontend Developer', 'React Developer', 'Next.js Developer', 
-    'TypeScript Developer', 'Full-Stack Developer', 'Sandeep Bhargav', 
-    'Web Developer', 'Software Engineer', 'Portfolio', 'Hyderabad', 'India'
+    'React Developer', 'Frontend Developer', 'Next.js Developer',
+    'TypeScript Developer', 'React.js Developer', 'JavaScript ES6+',
+    'React Hooks', 'Redux', 'Tailwind CSS', 'REST API Integration',
+    'Responsive Web Design', 'HTML5', 'CSS3', 'Sandeep Bhargav',
+    'Frontend Developer in Hyderabad', 'React developer portfolio',
+    'Hyderabad', 'India'
   ],
   authors: [{ name: 'Sandeep Bhargav', url: 'https://portfolio-seven-ivory-88.vercel.app/' }],
   creator: 'Sandeep Bhargav',
@@ -39,22 +42,22 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://portfolio-seven-ivory-88.vercel.app/',
-    title: 'Sandeep Bhargav | React Developer',
-    description: 'Explore my frontend development skills and projects built with React.js, Next.js, and TypeScript.',
+    title: 'Sandeep Bhargav | React & Frontend Developer',
+    description: 'Discover React.js, Next.js, and TypeScript projects by Sandeep Bhargav, a frontend developer.',
     siteName: 'Sandeep Bhargav Portfolio',
     images: [
       {
         url: 'https://portfolio-seven-ivory-88.vercel.app/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Sandeep Bhargav - React Developer',
+        alt: 'Sandeep Bhargav - React & Frontend Developer',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sandeep Bhargav | React Developer',
-    description: 'Explore my frontend development skills and projects built with React.js, Next.js, and TypeScript.',
+    title: 'Sandeep Bhargav | React & Frontend Developer',
+    description: 'Discover React.js, Next.js, and TypeScript projects by Sandeep Bhargav, a frontend developer.',
     images: ['https://portfolio-seven-ivory-88.vercel.app/og-image.png'],
     creator: '@sandeepbhargav',
   },
@@ -79,13 +82,24 @@ const jsonLd = {
   '@type': 'Person',
   name: 'Sandeep Bhargav',
   url: 'https://portfolio-seven-ivory-88.vercel.app/',
-  jobTitle: 'Frontend Developer',
+  jobTitle: 'React & Frontend Developer',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Hyderabad',
+    addressCountry: 'India',
+  },
   knowsAbout: [
     'React.js',
     'Next.js',
     'TypeScript',
-    'JavaScript',
-    'Responsive Web Development',
+    'JavaScript ES6+',
+    'React Hooks',
+    'Redux',
+    'Tailwind CSS',
+    'REST API Integration',
+    'Responsive Web Design',
+    'HTML5',
+    'CSS3',
   ],
 };
 

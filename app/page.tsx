@@ -9,12 +9,12 @@ import { GitHubCalendar } from 'react-github-calendar';
 import CommandPalette from './components/CommandPalette';
 import Preloader from './components/Preloader';
 const stack = [
-  { name: 'React', category: 'frontend', use: 'Interface systems', desc: 'Composing product-grade UI with deliberate state and motion.' },
-  { name: 'Next.js', category: 'frontend', use: 'Web products', desc: 'Fast, search-friendly applications with modern routing.' },
-  { name: 'TypeScript', category: 'frontend', use: 'Reliable scale', desc: 'Type-safe contracts that keep teams moving quickly.' },
-  { name: 'JavaScript', category: 'frontend', use: 'Core craft', desc: 'The flexible layer underneath every polished interaction.' },
-  { name: 'HTML5', category: 'frontend', use: 'Web markup', desc: 'Semantic structure for accessible, modern web interfaces.' },
-  { name: 'Node.js', category: 'backend', use: 'Product APIs', desc: 'Eventful server-side systems that meet frontend needs.' },
+  { name: 'React', category: 'frontend', use: 'Interface systems', desc: 'Composing product-grade UI with deliberate state, React Hooks, and fluid motion.' },
+  { name: 'Next.js', category: 'frontend', use: 'Web products', desc: 'Fast, search-friendly applications with modern routing, SSR, and SSG.' },
+  { name: 'TypeScript', category: 'frontend', use: 'Reliable scale', desc: 'Type-safe contracts that keep frontend codebases scalable and maintainable.' },
+  { name: 'JavaScript', category: 'frontend', use: 'Core craft', desc: 'Modern JavaScript (ES6+) powering dynamic, responsive user interactions.' },
+  { name: 'HTML5', category: 'frontend', use: 'Web markup', desc: 'Semantic structure for accessible, modern web interfaces and SEO.' },
+  { name: 'Node.js', category: 'backend', use: 'Product APIs', desc: 'Eventful server-side systems and RESTful APIs that meet frontend needs.' },
   { name: 'NestJS', category: 'backend', use: 'Backend architecture', desc: 'Structured services designed to grow without friction.' },
   { name: 'Spring Boot', category: 'backend', use: 'Enterprise systems', desc: 'Reliable Java services and production integrations.' },
   { name: 'PostgreSQL', category: 'database', use: 'Data integrity', desc: 'Thoughtful relational modelling and query performance.' },
@@ -22,20 +22,20 @@ const stack = [
   { name: 'Firebase', category: 'database', use: 'Rapid shipping', desc: 'Authentication, realtime data and streamlined deployment.' },
   { name: 'AWS', category: 'tools', use: 'Cloud delivery', desc: 'Pragmatic cloud infrastructure and release workflows.' },
   { name: 'Docker', category: 'tools', use: 'Reproducible builds', desc: 'Same environment from local development to production.' },
-  { name: 'Tailwind CSS', category: 'frontend', use: 'Design velocity', desc: 'Consistent interfaces without CSS drift.' },
+  { name: 'Tailwind CSS', category: 'frontend', use: 'Design velocity', desc: 'Consistent, mobile-friendly interfaces without CSS drift.' },
   { name: 'Material UI', category: 'frontend', use: 'Product foundations', desc: 'Accessible primitives shaped into bespoke experiences.' },
-  { name: 'Redux', category: 'frontend', use: 'State clarity', desc: 'Predictable app state for complex user flows.' },
+  { name: 'Redux', category: 'frontend', use: 'State clarity', desc: 'Predictable app state with Redux Toolkit for complex user flows.' },
   { name: 'GraphQL', category: 'backend', use: 'Connected data', desc: 'Precise client data requirements with scalable APIs.' },
   { name: 'Git', category: 'tools', use: 'Team flow', desc: 'Versioned collaboration and confident iteration.' },
 ];
 
 const projects = [
-  { slug: 'teamtrakr', number: '01', title: 'TeamTrakr', eyebrow: 'SaaS workforce management', url: 'https://teamtrakr.com/', description: 'A multi-tenant workspace for projects, attendance, employee engagement, subscription management and team administration.', role: 'React developer', tech: ['React', 'TypeScript', 'Tailwind CSS', 'REST APIs'], features: ['Task and attendance workflows', 'RBAC user management', 'Subscription experiences'], accent: 'lime', architecture: 'Reusable React and TypeScript components communicate with REST APIs, with role-aware dashboards and state built for live workspace updates.', problem: 'Modern teams needed a unified workspace that supports productivity, engagement and operational oversight.', result: 'A responsive SaaS experience covering project summaries, attendance widgets, management tools and subscription flows.' },
-  { slug: 'teamrex', number: '02', title: 'Teamrex', eyebrow: 'SaaS collaboration platform', url: 'https://main.d6sjazuoh3gde.amplifyapp.com/', description: 'A real-time collaboration workspace for chat, video meetings, file sharing, team channels and notifications.', role: 'React developer', tech: ['React', 'Next.js', 'Bootstrap', 'WebSockets'], features: ['Instant chat', 'Channel management', 'File sharing'], accent: 'violet', architecture: 'React and Next.js interfaces use REST APIs and WebSockets to surface live messaging, presence and channel activity.', problem: 'Teams required reliable communication, shared files and channel coordination within a single subscription platform.', result: 'A responsive collaboration experience with real-time updates, role-aware screens and subscription UI flows.' },
-  { slug: 'jobber', number: '03', title: 'Jobber', eyebrow: 'Recruitment module', description: 'A recruitment platform for tracking resumes, candidate profiles and application status in one organized workflow.', role: 'React developer', tech: ['React', 'Next.js', 'Redux Toolkit', 'Swagger'], features: ['Resume upload', 'Candidate status tracking', 'Profile management'], accent: 'blue', architecture: 'A modular React UI uses Redux Toolkit for shared state and Swagger-documented APIs for consistent recruitment data flows.', problem: 'Recruiters needed a clearer way to manage candidate records and application progress.', result: 'A maintainable recruitment module with reusable components and real-time-feeling UI updates.' },
-  { slug: 'timespace', number: '04', title: 'Time & Space', eyebrow: 'Metro advertising inventory', description: 'An interactive web platform that presents Hyderabad Metro advertising inventory across stations and pillars.', role: 'React frontend developer', tech: ['React', 'Material UI', 'REST APIs'], features: ['Location-based browsing', 'Media showcases', 'Responsive inventory views'], accent: 'blue', architecture: 'A responsive React interface uses Material UI components to make location-specific media inventory easy to browse.', problem: 'Businesses and agencies needed a polished way to discover outdoor branding opportunities by location.', result: 'A modern, scalable showcase that turns advertising inventory into an accessible digital catalogue.' },
-  { slug: 'zenn', number: '05', title: 'Zenn', eyebrow: 'Catering & product ordering', url: 'https://www.zenncafe.com.au/', description: 'An Australia-based catering and product ordering website with a smooth journey from menu browsing to order placement.', role: 'Next.js frontend developer', tech: ['Next.js', 'Material UI', 'REST APIs'], features: ['Dynamic menus', 'Cart management', 'Order placement'], accent: 'orange', architecture: 'Next.js pages and reusable Material UI components consume live product and order data through REST APIs.', problem: 'The client needed a clear ordering experience that worked beautifully on desktop, tablet and mobile.', result: 'A responsive commerce experience for catering menus, products and real-time ordering data.' },
-  { slug: 'stdreux', number: '06', title: 'St Dreux', eyebrow: 'Catering operations', url: 'https://stdreux.com.au/', description: 'An Australia-based catering and ordering management platform for browsing menus, managing addresses and tracking orders.', role: 'Next.js frontend developer', tech: ['Next.js', 'Material UI', 'REST APIs'], features: ['Order history', 'Address management', 'Customer workflows'], accent: 'orange', architecture: 'Reusable frontend modules communicate with REST APIs for product data, user profiles and order processing.', problem: 'Customers and operations teams needed a more intuitive end-to-end ordering and management flow.', result: 'A scalable, cross-browser ordering experience designed for the full customer journey.' },
+  { slug: 'teamtrakr', number: '01', title: 'TeamTrakr', eyebrow: 'SaaS workforce management', url: 'https://teamtrakr.com/', description: 'A responsive SaaS workforce management application built with React, TypeScript, Tailwind CSS, and REST APIs, featuring multi-tenant workspace administration, task workflows, and live analytics.', role: 'React developer', tech: ['React', 'TypeScript', 'Tailwind CSS', 'REST APIs'], features: ['Task and attendance workflows', 'RBAC user management', 'Subscription experiences'], accent: 'lime', architecture: 'Reusable React and TypeScript components communicate with REST APIs, with role-aware dashboards and state built for live workspace updates.', problem: 'Modern teams needed a unified workspace that supports productivity, engagement and operational oversight.', result: 'A responsive SaaS experience covering project summaries, attendance widgets, management tools and subscription flows.' },
+  { slug: 'teamrex', number: '02', title: 'Teamrex', eyebrow: 'SaaS collaboration platform', url: 'https://main.d6sjazuoh3gde.amplifyapp.com/', description: 'A real-time collaboration workspace for chat, video meetings, file sharing, team channels and notifications built with React, Next.js, and WebSockets.', role: 'React developer', tech: ['React', 'Next.js', 'Bootstrap', 'WebSockets'], features: ['Instant chat', 'Channel management', 'File sharing'], accent: 'violet', architecture: 'React and Next.js interfaces use REST APIs and WebSockets to surface live messaging, presence and channel activity.', problem: 'Teams required reliable communication, shared files and channel coordination within a single subscription platform.', result: 'A responsive collaboration experience with real-time updates, role-aware screens and subscription UI flows.' },
+  { slug: 'jobber', number: '03', title: 'Jobber', eyebrow: 'Recruitment module', description: 'Built a responsive recruitment platform and job portal using React, Next.js, Redux Toolkit, and REST APIs, with reusable components, candidate status tracking, and mobile-friendly layouts.', role: 'React developer', tech: ['React', 'Next.js', 'Redux Toolkit', 'Swagger'], features: ['Resume upload', 'Candidate status tracking', 'Profile management'], accent: 'blue', architecture: 'A modular React UI uses Redux Toolkit for shared state and Swagger-documented APIs for consistent recruitment data flows.', problem: 'Recruiters needed a clearer way to manage candidate records and application progress.', result: 'A maintainable recruitment module with reusable components and real-time-feeling UI updates.' },
+  { slug: 'timespace', number: '04', title: 'Time & Space', eyebrow: 'Metro advertising inventory', description: 'An interactive web platform that presents Hyderabad Metro advertising inventory across stations and pillars using responsive React and Material UI.', role: 'React frontend developer', tech: ['React', 'Material UI', 'REST APIs'], features: ['Location-based browsing', 'Media showcases', 'Responsive inventory views'], accent: 'blue', architecture: 'A responsive React interface uses Material UI components to make location-specific media inventory easy to browse.', problem: 'Businesses and agencies needed a polished way to discover outdoor branding opportunities by location.', result: 'A modern, scalable showcase that turns advertising inventory into an accessible digital catalogue.' },
+  { slug: 'zenn', number: '05', title: 'Zenn', eyebrow: 'Catering & product ordering', url: 'https://www.zenncafe.com.au/', description: 'A responsive e-commerce catering and product ordering web application built with Next.js, Material UI, and REST APIs for seamless menu browsing and checkout.', role: 'Next.js frontend developer', tech: ['Next.js', 'Material UI', 'REST APIs'], features: ['Dynamic menus', 'Cart management', 'Order placement'], accent: 'orange', architecture: 'Next.js pages and reusable Material UI components consume live product and order data through REST APIs.', problem: 'The client needed a clear ordering experience that worked beautifully on desktop, tablet and mobile.', result: 'A responsive commerce experience for catering menus, products and real-time ordering data.' },
+  { slug: 'stdreux', number: '06', title: 'St Dreux', eyebrow: 'Catering operations', url: 'https://stdreux.com.au/', description: 'A scalable catering and ordering management platform built with Next.js and REST APIs for browsing menus, managing addresses, and tracking orders.', role: 'Next.js frontend developer', tech: ['Next.js', 'Material UI', 'REST APIs'], features: ['Order history', 'Address management', 'Customer workflows'], accent: 'orange', architecture: 'Reusable frontend modules communicate with REST APIs for product data, user profiles and order processing.', problem: 'Customers and operations teams needed a more intuitive end-to-end ordering and management flow.', result: 'A scalable, cross-browser ordering experience designed for the full customer journey.' },
 ];
 
 const terminalResponses: Record<string, string[]> = {
@@ -302,10 +302,10 @@ function CodePanel() { return <div className="workspace-wrap"><div className="wo
 import { Rocket, Users, ArrowRight } from 'lucide-react';
 
 const heroRoles = [
+  { accent: 'React Developer &', text: 'Frontend Engineer' },
+  { accent: 'Next.js & TypeScript', text: 'Specialist' },
   { accent: 'React Full Stack', text: 'Developer' },
-  { accent: 'Next.js & Node.js', text: 'Specialist' },
   { accent: 'Scalable SaaS', text: 'Architect' },
-  { accent: 'AI-Accelerated', text: 'Engineer' },
 ];
 
 function Hero() {
@@ -364,6 +364,9 @@ function Hero() {
             >
               Bhargav
             </motion.span>
+            <span style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>
+              {' '}— React Developer &amp; Frontend Engineer
+            </span>
           </h1>
 
           <div className="hero-subtitle-wrapper">
@@ -388,7 +391,7 @@ function Hero() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
             className="hero-desc"
           >
-            React Full Stack Developer with 2.1+ years of experience building scalable, production web applications using React, Next.js, Node.js, and TypeScript. Delivers user-centric platforms across SaaS collaboration, recruitment, and e-commerce domains for clients in Australia and India. AI-accelerated engineering using Claude (via Google Antigravity).
+            Frontend Developer &amp; React Developer with 2.1+ years of experience building scalable, production web applications using React.js, Next.js, TypeScript, and modern JavaScript (ES6+). Delivers user-centric, responsive web design across SaaS collaboration, recruitment, and e-commerce platforms with robust REST API integrations. Available for frontend developer opportunities in Hyderabad and remote.
           </motion.p>
 
           <motion.div
@@ -496,7 +499,7 @@ function Intro() {
         </div>
         <div className="intro-body">
           <div className="intro-left">
-            <p>With 2.1 years of frontend experience, I turn wireframes and product requirements into responsive, reliable React experiences — with attention to performance, clarity and the details users notice.</p>
+            <p>Frontend developer specializing in React.js, Next.js, and TypeScript with 2.1+ years of experience. I turn complex wireframes and product requirements into high-performance, responsive web applications using React Hooks, Redux, Tailwind CSS, and REST API integrations—focusing on speed, accessibility, and clean component architecture.</p>
             <div className="intro-stats">
               {[['2.1', 'Years experience'], ['6+', 'Projects shipped'], ['11+', 'Core tools'], ['100%', 'Passion']].map(([n, l]) => (
                 <div key={l} className="intro-stat glass"><strong>{n}</strong><span>{l}</span></div>
@@ -589,7 +592,7 @@ function TechStack() {
               </motion.div>
             </div>
           </motion.h2>
-          <p>Tools are only valuable when they help you build the right thing. Here&apos;s what I reach for and why.</p>
+          <p>Proficient in React, Next.js, TypeScript, JavaScript (ES6+), Redux, Tailwind CSS, and responsive web design. Here&apos;s what I reach for to build scalable, high-performance frontend applications.</p>
         </motion.div>
 
         {/* Categories Tabs */}
@@ -793,7 +796,7 @@ function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void
               </div>
             </motion.h2>
           </div>
-          <p>Selected platforms where product thinking, interface craft and technical detail come together.</p>
+          <p>Selected React developer projects and responsive web applications built with Next.js, TypeScript, and modern REST APIs.</p>
         </motion.div>
 
         {/* 3D Coverflow Carousel Showcase matching reference */}
@@ -1162,7 +1165,7 @@ function Contact() {
           </motion.h2>
 
           <p className="contact-subtitle">
-            Whether you&apos;re launching a new product, upgrading an existing application, or needing high-impact full-stack engineering—let&apos;s collaborate.
+            Available for frontend developer and React developer opportunities. Whether you&apos;re launching a new product, looking for a frontend developer in Hyderabad or remote, or upgrading an existing application—let&apos;s collaborate.
           </p>
 
           {/* Quick Contact Action Cards */}
