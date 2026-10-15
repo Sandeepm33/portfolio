@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useInView, useMotionValue, useReducedMotion, useSpring, useScroll, useTransform } from 'framer-motion';
-import { ArrowDownRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Code2, Copy, Download, Github, Linkedin, Mail, Menu, Moon, Search, Send, Sun, TerminalSquare, X } from 'lucide-react';
+import { AlertCircle, ArrowDownRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Code2, Copy, Download, Github, Linkedin, Mail, Menu, Moon, Search, Send, Sun, TerminalSquare, X } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { GitHubCalendar } from 'react-github-calendar';
 import CommandPalette from './components/CommandPalette';
@@ -157,13 +157,15 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
         />
 
         {/* Brand Logo with Live Status Indicator */}
-        <a className="brand-link" href="#home" onClick={(e) => scrollToSection(e, 'home')}>
+        <a className="brand-link" href="#home" onClick={(e) => scrollToSection(e, 'home')} aria-label="Sandeep Bhargav - Home">
           <span className="brand-status-dot" title="Available for opportunities">
             <span className="status-ping" />
           </span>
-          <span className="brand-name">
-            SANDEEP BHARGAV <span className="brand-last">MURARISHETTY</span>
-          </span>
+          <img
+            src="/images/sb.png"
+            alt="SB"
+            className="brand-logo-img"
+          />
         </a>
 
         {/* Dynamic Floating Links */}
@@ -1113,7 +1115,7 @@ function Contact() {
     if (Object.keys(next).length) { setState('error'); return; }
     setState('loading');
     emailjs.send(
-      'service_ljeh49e',
+      'service_kt3gqgx',
       'template_saxsbhn',
       { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message },
       'jjNHbEqnK46HE_ryq'
@@ -1122,8 +1124,14 @@ function Contact() {
       setForm({ name: '', email: '', type: '⚡ New Product', message: '' });
     }, (error) => {
       setState('error');
-      setErrors({ submit: 'Failed to send message. Please try again later.' });
-      console.error(error.text);
+      const errorMsg = (typeof error === 'object' && error !== null && 'text' in error) ? String(error.text) : String(error || '');
+      if (errorMsg.includes('Invalid grant') || errorMsg.includes('Gmail_API')) {
+        setErrors({ submit: 'Gmail authorization expired. Please reconnect Gmail in EmailJS dashboard, or use direct email below.' });
+        console.warn('EmailJS Gmail authorization expired ("Invalid grant"). To fix: open https://dashboard.emailjs.com/admin/services, select service_kt3gqgx, and click Reconnect Account.');
+      } else {
+        setErrors({ submit: 'Failed to send message. Please try again later or reach out directly below.' });
+      }
+      console.error('EmailJS Error:', errorMsg);
     });
   };
 
@@ -1300,7 +1308,24 @@ function Contact() {
                 </span>
               </button>
 
-              {errors.submit && <p className="form-submit-error">{errors.submit}</p>}
+              {errors.submit && (
+                <div className="form-submit-error">
+                  <div className="error-main-msg">
+                    <AlertCircle size={16} />
+                    <span>{errors.submit}</span>
+                  </div>
+                  <a
+                    href={`mailto:sandeepbhargavmurarishetti@gmail.com?subject=${encodeURIComponent(
+                      `[Portfolio Inquiry] ${form.type} - ${form.name || 'Visitor'}`
+                    )}&body=${encodeURIComponent(
+                      `Hi Sandeep,\n\n${form.message || 'I would like to discuss a project with you.'}\n\nFrom: ${form.name || 'Anonymous'}\nEmail: ${form.email || 'Not provided'}\nCategory: ${form.type}`
+                    )}`}
+                    className="error-fallback-link"
+                  >
+                    <span>Click here to send directly via your email app &rarr;</span>
+                  </a>
+                </div>
+              )}
               {state === 'success' && (
                 <p className="form-submit-success">
                   <Check size={15} /> Thank you! Your message was sent successfully. I will get back to you shortly.

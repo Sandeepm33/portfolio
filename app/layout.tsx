@@ -17,6 +17,16 @@ export const metadata: Metadata = {
     default: 'Sandeep Bhargav | React & Full-Stack Developer',
     template: '%s | Sandeep Bhargav',
   },
+  icons: {
+    icon: [
+      { url: '/images/sb.png' },
+      { url: '/favicon.ico' },
+    ],
+    apple: [
+      { url: '/images/sb.png' },
+    ],
+    shortcut: ['/images/sb.png'],
+  },
   description: 'Portfolio of Sandeep Bhargav, a React and Full-Stack Developer building scalable, modern web applications. Expert in Next.js, TypeScript, and Node.js.',
   keywords: [
     'Frontend Developer', 'React Developer', 'Next.js Developer', 
