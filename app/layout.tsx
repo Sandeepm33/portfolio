@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://portfolio-seven-ivory-88.vercel.app'),
   title: {
-    default: 'Sandeep Bhargav | React & Full-Stack Developer',
+    default: 'Sandeep Bhargav | React Developer Portfolio',
     template: '%s | Sandeep Bhargav',
   },
   icons: {
@@ -27,35 +27,35 @@ export const metadata: Metadata = {
     ],
     shortcut: ['/images/sb.png'],
   },
-  description: 'Portfolio of Sandeep Bhargav, a React and Full-Stack Developer building scalable, modern web applications. Expert in Next.js, TypeScript, and Node.js.',
+  description: "Explore Sandeep Bhargav's developer portfolio featuring React.js, Next.js, TypeScript, responsive web applications, and frontend projects.",
   keywords: [
     'Frontend Developer', 'React Developer', 'Next.js Developer', 
     'TypeScript Developer', 'Full-Stack Developer', 'Sandeep Bhargav', 
     'Web Developer', 'Software Engineer', 'Portfolio', 'Hyderabad', 'India'
   ],
-  authors: [{ name: 'Sandeep Bhargav', url: 'https://portfolio-seven-ivory-88.vercel.app' }],
+  authors: [{ name: 'Sandeep Bhargav', url: 'https://portfolio-seven-ivory-88.vercel.app/' }],
   creator: 'Sandeep Bhargav',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://portfolio-seven-ivory-88.vercel.app',
-    title: 'Sandeep Bhargav | React & Full-Stack Developer',
-    description: 'Portfolio of Sandeep Bhargav, a React and Full-Stack Developer building scalable, modern web applications.',
+    url: 'https://portfolio-seven-ivory-88.vercel.app/',
+    title: 'Sandeep Bhargav | React Developer',
+    description: 'Explore my frontend development skills and projects built with React.js, Next.js, and TypeScript.',
     siteName: 'Sandeep Bhargav Portfolio',
     images: [
       {
-        url: '/images/sandeep-portrait.png', // Fallback OpenGraph image
+        url: 'https://portfolio-seven-ivory-88.vercel.app/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Sandeep Bhargav - Frontend Developer',
+        alt: 'Sandeep Bhargav - React Developer',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sandeep Bhargav | React & Full-Stack Developer',
-    description: 'Portfolio of Sandeep Bhargav, a React and Full-Stack Developer building scalable, modern web applications.',
-    images: ['/images/sandeep-portrait.png'],
+    title: 'Sandeep Bhargav | React Developer',
+    description: 'Explore my frontend development skills and projects built with React.js, Next.js, and TypeScript.',
+    images: ['https://portfolio-seven-ivory-88.vercel.app/og-image.png'],
     creator: '@sandeepbhargav',
   },
   robots: {
@@ -70,13 +70,34 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://portfolio-seven-ivory-88.vercel.app',
+    canonical: 'https://portfolio-seven-ivory-88.vercel.app/',
   },
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Sandeep Bhargav',
+  url: 'https://portfolio-seven-ivory-88.vercel.app/',
+  jobTitle: 'Frontend Developer',
+  knowsAbout: [
+    'React.js',
+    'Next.js',
+    'TypeScript',
+    'JavaScript',
+    'Responsive Web Development',
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );
