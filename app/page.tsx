@@ -142,33 +142,28 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
   };
 
   return (
-    <header className={`nav-wrap ${isScrolled ? 'is-scrolled' : ''}`}>
+    <header className={`nav-header nav-wrap ${isScrolled ? 'is-scrolled' : ''}`}>
       <motion.nav
-        className="nav glass dynamic-pill"
-        initial={{ y: -50, opacity: 0 }}
+        className="nav-container nav"
+        initial={{ y: -15, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         aria-label="Main navigation"
       >
-        {/* Scroll Progress Line */}
-        <motion.div
-          className="nav-progress-indicator"
-          style={{ scaleX: progressScale }}
-        />
-
-        {/* Brand Logo with Live Status Indicator */}
+        {/* Brand Logo & Name */}
         <a className="brand-link" href="#home" onClick={(e) => scrollToSection(e, 'home')} aria-label="Sandeep Bhargav - Home">
-          <span className="brand-status-dot" title="Available for opportunities">
-            <span className="status-ping" />
-          </span>
           <img
             src="/images/sb.png"
             alt="SB"
             className="brand-logo-img"
           />
+          <div className="brand-info">
+            <span className="brand-name">Sandeep Bhargav</span>
+            <span className="brand-role">React Full Stack Developer</span>
+          </div>
         </a>
 
-        {/* Dynamic Floating Links */}
+        {/* Center Nav Links */}
         <div className="nav-links" onMouseLeave={() => setHoveredLink(null)}>
           {links.map((link) => {
             const isActive = activeSection === link.id;
@@ -185,7 +180,7 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
                   <motion.span
                     layoutId="activeNavPill"
                     className={`nav-pill-bg ${isActive ? 'is-active-pill' : 'is-hover-pill'}`}
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                   />
                 )}
                 <span className="nav-link-text">{link.label}</span>
@@ -207,7 +202,7 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
           </button>
 
           <a
-            className="resume-pill-btn"
+            className="resume-btn resume-pill-btn"
             href="/images/Sandeep%20bhargav%20_resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
@@ -223,6 +218,12 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
+
+        {/* Hairline Reading Progress Indicator */}
+        <motion.div
+          className="nav-progress-indicator"
+          style={{ scaleX: progressScale }}
+        />
       </motion.nav>
 
       {/* Mobile Animated Overlay Drawer */}
