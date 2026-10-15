@@ -153,8 +153,11 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
         {/* Brand Logo & Name */}
         <a className="brand-link" href="#home" onClick={(e) => scrollToSection(e, 'home')} aria-label="Sandeep Bhargav - Home">
           <img
-            src="/images/sb.png"
-            alt="SB"
+            src="/images/sb.webp"
+            alt="Sandeep Bhargav Logo"
+            width={36}
+            height={36}
+            decoding="async"
             className="brand-logo-img"
           />
           <div className="brand-info">
@@ -446,7 +449,14 @@ function Hero() {
         <motion.div className="hero-portrait-col">
           <motion.div style={{ scale: scalePortrait, y: yPortrait }} className="hero-portrait-motion">
             <div className="hero-portrait-circle">
-              <Image src="/images/sandeep3.png" alt="Sandeep Bhargav" fill style={{ objectFit: 'contain', objectPosition: 'center bottom' }} priority />
+              <Image
+                src="/images/sandeep3.webp"
+                alt="Sandeep Bhargav - React Developer"
+                fill
+                sizes="(max-width: 768px) 300px, 450px"
+                style={{ objectFit: 'contain', objectPosition: 'center bottom' }}
+                priority
+              />
             </div>
           </motion.div>
         </motion.div>
@@ -652,11 +662,72 @@ function TechStack() {
 
 function ProjectPreview({ project }: { project: typeof projects[number] }) {
   const content = {
-    teamtrakr: <div style={{ width: '100%', background: '#f0f2f5' }}><img src="/images/teamtrakr.png" alt="TeamTrakr dashboard" style={{ width: '100%', height: 'auto', display: 'block' }} /></div>,
-    teamrex: <div style={{ width: '100%', background: '#f0f2f5' }}><img src="/images/teamrex.png" alt="Teamrex dashboard" style={{ width: '100%', height: 'auto', display: 'block' }} /></div>,
-    jobber: <><div className="hire-head"><b>jobber</b><span>Find candidates</span><span>For recruiters</span></div><div className="hire-main"><small>FIND THE RIGHT</small><strong>People make<br />progress.</strong><div>Search candidates, status or skill <b>→</b></div></div></>,
-    zenn: <div style={{ width: '100%', background: '#f0f2f5' }}><img src="/images/zenn.png" alt="Zenn frontend" style={{ width: '100%', height: 'auto', display: 'block' }} /></div>,
-    stdreux: <div style={{ width: '100%', background: '#f0f2f5' }}><img src="/images/stdreux.png" alt="St Dreux platform" style={{ width: '100%', height: 'auto', display: 'block' }} /></div>,
+    teamtrakr: (
+      <div style={{ width: '100%', background: '#f0f2f5' }}>
+        <img
+          src="/images/teamtrakr.webp"
+          alt="TeamTrakr SaaS workforce management dashboard"
+          width={1200}
+          height={545}
+          loading="lazy"
+          decoding="async"
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        />
+      </div>
+    ),
+    teamrex: (
+      <div style={{ width: '100%', background: '#f0f2f5' }}>
+        <img
+          src="/images/teamrex.webp"
+          alt="Teamrex real-time collaboration platform"
+          width={1200}
+          height={546}
+          loading="lazy"
+          decoding="async"
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        />
+      </div>
+    ),
+    jobber: (
+      <>
+        <div className="hire-head">
+          <b>jobber</b>
+          <span>Find candidates</span>
+          <span>For recruiters</span>
+        </div>
+        <div className="hire-main">
+          <small>FIND THE RIGHT</small>
+          <strong>People make<br />progress.</strong>
+          <div>Search candidates, status or skill <b>→</b></div>
+        </div>
+      </>
+    ),
+    zenn: (
+      <div style={{ width: '100%', background: '#f0f2f5' }}>
+        <img
+          src="/images/zenn.webp"
+          alt="Zenn catering and product ordering platform"
+          width={1200}
+          height={544}
+          loading="lazy"
+          decoding="async"
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        />
+      </div>
+    ),
+    stdreux: (
+      <div style={{ width: '100%', background: '#f0f2f5' }}>
+        <img
+          src="/images/stdreux.webp"
+          alt="St Dreux catering operations platform"
+          width={1200}
+          height={534}
+          loading="lazy"
+          decoding="async"
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        />
+      </div>
+    ),
   } as Record<string, React.ReactNode>;
   const fallback = <div className="event-copy"><small>DIGITAL PLATFORM</small><strong>{project.title}<br /><i>made clear.</i></strong><span className="preview-action">Explore experience</span></div>;
   return (
@@ -1386,7 +1457,7 @@ function ResumeSection() {
                 <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text)' }}>Resume Preview</h3>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <a href="/images/Sandeep%20bhargav%20_resume.pdf" download className="button primary" style={{ padding: '8px 14px', fontSize: '10px', margin: 0 }}>Download PDF</a>
-                  <button className="case-close" style={{ position: 'relative', top: 0, right: 0, margin: 0 }} onClick={() => setOpen(false)}><X size={18} /></button>
+                  <button className="case-close" style={{ position: 'relative', top: 0, right: 0, margin: 0 }} onClick={() => setOpen(false)} aria-label="Close resume preview"><X size={18} /></button>
                 </div>
               </div>
 
@@ -1405,7 +1476,7 @@ function Footer() {
   return (
     <footer className="section-wrapper section-bg-footer">
       <div className="footer-inner">
-        <a className="brand" href="#home">SANDEEP<span>.DEV</span></a>
+        <a className="brand" href="#home" aria-label="Sandeep Bhargav Home">SANDEEP<span>.DEV</span></a>
         <p>Designed & engineered with intention.</p>
         <span>© {new Date().getFullYear()} Sandeep Bhargav</span>
       </div>
