@@ -75,6 +75,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://portfolio-seven-ivory-88.vercel.app/',
   },
+  verification: {
+    google: '2d30c754142bc9c4',
+  },
 };
 
 const jsonLd = {
