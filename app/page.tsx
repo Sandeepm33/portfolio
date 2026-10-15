@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useInView, useMotionValue, useReducedMotion, useSpring, useScroll, useTransform } from 'framer-motion';
-import { ArrowDownRight, ArrowUpRight, Check, ChevronRight, Code2, Copy, Download, Github, Linkedin, Mail, Menu, Moon, Search, Send, Sun, TerminalSquare, X } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Code2, Copy, Download, Github, Linkedin, Mail, Menu, Moon, Search, Send, Sun, TerminalSquare, X } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { GitHubCalendar } from 'react-github-calendar';
 import CommandPalette from './components/CommandPalette';
@@ -670,20 +670,105 @@ function ProjectPreview({ project }: { project: typeof projects[number] }) {
 }
 
 function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void }) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const getBentoClass = (index: number) => {
-    if (index === 0) return 'bento-hero';
-    if (index === 1 || index === 2) return 'bento-mid';
-    return 'bento-compact';
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "start center"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
+
+  const prev = () => {
+    setCurrentIndex((prevIdx) => (prevIdx - 1 + projects.length) % projects.length);
   };
+
+  const next = () => {
+    setCurrentIndex((prevIdx) => (prevIdx + 1) % projects.length);
+  };
+
+  const getCardStyle = (index: number) => {
+    let diff = index - currentIndex;
+    const len = projects.length;
+
+    // Circular wrapping distance
+    if (diff > len / 2) diff -= len;
+    if (diff < -len / 2) diff += len;
+
+    if (diff === 0) {
+      return {
+        x: '0%',
+        scale: 1,
+        opacity: 1,
+        zIndex: 10,
+        filter: 'none',
+        pointerEvents: 'auto' as const,
+        cursor: 'pointer',
+      };
+    }
+
+    if (diff === -1) {
+      return {
+        x: '-64%',
+        scale: 0.82,
+        opacity: 0.42,
+        zIndex: 5,
+        filter: 'blur(1.5px) contrast(0.92)',
+        pointerEvents: 'auto' as const,
+        cursor: 'pointer',
+      };
+    }
+
+    if (diff === 1) {
+      return {
+        x: '64%',
+        scale: 0.82,
+        opacity: 0.42,
+        zIndex: 5,
+        filter: 'blur(1.5px) contrast(0.92)',
+        pointerEvents: 'auto' as const,
+        cursor: 'pointer',
+      };
+    }
+
+    if (diff === -2) {
+      return {
+        x: '-114%',
+        scale: 0.68,
+        opacity: 0.18,
+        zIndex: 2,
+        filter: 'blur(3px)',
+        pointerEvents: 'none' as const,
+        cursor: 'default',
+      };
+    }
+
+    if (diff === 2) {
+      return {
+        x: '114%',
+        scale: 0.68,
+        opacity: 0.18,
+        zIndex: 2,
+        filter: 'blur(3px)',
+        pointerEvents: 'none' as const,
+        cursor: 'default',
+      };
+    }
+
+    return {
+      x: diff < 0 ? '-140%' : '140%',
+      scale: 0.5,
+      opacity: 0,
+      zIndex: 0,
+      filter: 'blur(5px)',
+      pointerEvents: 'none' as const,
+      cursor: 'default',
+    };
+  };
+
+  const currentProject = projects[currentIndex];
 
   return (
     <section id="projects" className="section-wrapper section-bg-projects">
-      <motion.section ref={ref} style={{ scale, opacity }} className="section projects">
+      <motion.section ref={sectionRef} style={{ scale, opacity }} className="section projects">
         <motion.div className="projects-top" {...reveal}>
           <div>
             <div className="section-label">03 / Selected work</div>
@@ -708,48 +793,124 @@ function Projects({ onSelect }: { onSelect: (p: typeof projects[number]) => void
           <p>Selected platforms where product thinking, interface craft and technical detail come together.</p>
         </motion.div>
 
-        <div className="bento-grid">
-          {projects.map((p, i) => (
-            <motion.article key={p.slug} className={`project ${getBentoClass(i)}`} {...reveal}>
-              <button data-cursor="view" className="project-visual" onClick={() => onSelect(p)}>
-                <ProjectPreview project={p} />
-                <span className="view-project">
-                  View case study <ArrowUpRight size={17} />
-                </span>
-              </button>
-              <div className="project-info">
-                <div className="project-header-meta">
-                  <span className="project-number">{p.number}</span>
-                  {i === 0 && <span className="bento-featured-badge"><span className="pulse-dot" /> FEATURED SAAS</span>}
-                </div>
-                <div>
-                  <p className="eyebrow">{p.eyebrow}</p>
-                  <h3>{p.title}</h3>
-                  <p className="project-desc">{p.description}</p>
-                  <div className="tags">
-                    {p.tech.map(t => <span key={t}>{t}</span>)}
-                  </div>
-                  <div className="project-actions">
-                    <button className="text-link" style={{ margin: 0 }} onClick={() => onSelect(p)}>
-                      Explore project <ArrowUpRight size={15} />
-                    </button>
-                    {(p as any).url && (
-                      <a
-                        href={(p as any).url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-link live-site-btn"
-                      >
-                        Visit Live Site <ArrowUpRight size={13} />
-                      </a>
+        {/* 3D Coverflow Carousel Showcase matching reference */}
+        <div className="coverflow-wrapper">
+          {/* Top Project Selector Pills Bar */}
+          <div className="coverflow-pills-bar-container">
+            <div className="coverflow-pills-bar" role="tablist">
+              {projects.map((p, idx) => {
+                const isActive = currentIndex === idx;
+                return (
+                  <button
+                    key={p.slug}
+                    role="tab"
+                    aria-selected={isActive}
+                    type="button"
+                    className={`coverflow-nav-pill ${isActive ? 'active' : ''}`}
+                    onClick={() => setCurrentIndex(idx)}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="activeCoverflowPill"
+                        className="coverflow-nav-pill-active-bg"
+                        transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                      />
                     )}
-                  </div>
-                </div>
-              </div>
-            </motion.article>
-          ))}
+                    <span className="pill-title-text">{p.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="coverflow-stage-container">
+            {/* Left Nav Arrow Button */}
+            <button
+              type="button"
+              className="coverflow-arrow-btn left"
+              onClick={prev}
+              aria-label="Previous project"
+            >
+              <ChevronLeft size={22} />
+            </button>
+
+            {/* Right Nav Arrow Button */}
+            <button
+              type="button"
+              className="coverflow-arrow-btn right"
+              onClick={next}
+              aria-label="Next project"
+            >
+              <ChevronRight size={22} />
+            </button>
+
+            {/* Swipable / Draggable Coverflow Track */}
+            <motion.div
+              className="coverflow-cards-track"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.18}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -40 || info.velocity.x < -300) {
+                  next();
+                } else if (info.offset.x > 40 || info.velocity.x > 300) {
+                  prev();
+                }
+              }}
+            >
+              {projects.map((p, idx) => {
+                const cardStyle = getCardStyle(idx);
+                const isCenter = idx === currentIndex;
+
+                return (
+                  <motion.div
+                    key={p.slug}
+                    className={`coverflow-card ${isCenter ? 'is-center' : 'is-side'}`}
+                    animate={{
+                      x: cardStyle.x,
+                      scale: cardStyle.scale,
+                      opacity: cardStyle.opacity,
+                      filter: cardStyle.filter,
+                    }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 280,
+                      damping: 28,
+                    }}
+                    style={{
+                      zIndex: cardStyle.zIndex,
+                      pointerEvents: cardStyle.pointerEvents,
+                      cursor: cardStyle.cursor,
+                    }}
+                    onClick={() => {
+                      if (isCenter) {
+                        onSelect(p);
+                      } else {
+                        setCurrentIndex(idx);
+                      }
+                    }}
+                  >
+                    <div className="coverflow-card-inner">
+                      <ProjectPreview project={p} />
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+
+          {/* Floating Pill Button directly under center visual */}
+          <div className="coverflow-cta-wrap">
+            <button
+              type="button"
+              className="coverflow-view-pill-btn"
+              onClick={() => onSelect(currentProject)}
+            >
+              <Search size={14} className="view-pill-icon" />
+              <span>Click to view case study &amp; screenshots</span>
+            </button>
+          </div>
         </div>
-        <Magnetic className="all-projects">View all projects <ArrowDownRight size={16} /></Magnetic>
       </motion.section>
     </section>
   );
