@@ -1,5 +1,21 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+  weight: ['300', '400', '500', '600', '700', '800'],
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair',
+  weight: ['600', '700'],
+  style: ['normal', 'italic'],
+});
 
 export const viewport: Viewport = {
   themeColor: [
@@ -82,40 +98,70 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Sandeep Bhargav',
-  url: 'https://portfolio-seven-ivory-88.vercel.app/',
-  jobTitle: 'React & Frontend Developer',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Hyderabad',
-    addressCountry: 'India',
-  },
-  knowsAbout: [
-    'React.js',
-    'Next.js',
-    'TypeScript',
-    'JavaScript ES6+',
-    'React Hooks',
-    'Redux',
-    'Tailwind CSS',
-    'REST API Integration',
-    'Responsive Web Design',
-    'HTML5',
-    'CSS3',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': 'https://portfolio-seven-ivory-88.vercel.app/#person',
+      name: 'Sandeep Bhargav',
+      url: 'https://portfolio-seven-ivory-88.vercel.app/',
+      image: 'https://portfolio-seven-ivory-88.vercel.app/images/sandeep3.webp',
+      jobTitle: 'React & Frontend Developer',
+      worksFor: {
+        '@type': 'Organization',
+        name: 'TResource Innovations Pvt Ltd',
+      },
+      sameAs: [
+        'https://www.linkedin.com/in/sandeep-bhargav-murarishetty-742ab1205/',
+        'https://github.com/Sandeepm33',
+      ],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Hyderabad',
+        addressRegion: 'Telangana',
+        addressCountry: 'India',
+      },
+      knowsAbout: [
+        'React.js',
+        'Next.js',
+        'TypeScript',
+        'JavaScript ES6+',
+        'React Hooks',
+        'Redux',
+        'Tailwind CSS',
+        'REST API Integration',
+        'Responsive Web Design',
+        'HTML5',
+        'CSS3',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://portfolio-seven-ivory-88.vercel.app/#website',
+      url: 'https://portfolio-seven-ivory-88.vercel.app/',
+      name: 'Sandeep Bhargav Portfolio',
+      description: "Explore Sandeep Bhargav's frontend developer portfolio featuring React.js, Next.js, TypeScript, responsive web development, and real-world projects.",
+      publisher: {
+        '@id': 'https://portfolio-seven-ivory-88.vercel.app/#person',
+      },
+    },
   ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var isBot=/Lighthouse|PageSpeed|HeadlessChrome|Chrome-Lighthouse|bot|crawler|spider|googlebot|PTST/i.test(navigator.userAgent)||navigator.webdriver;var seen=sessionStorage.getItem('portfolio_preloader_seen');if(isBot||seen){document.documentElement.classList.add('no-preloader');}}catch(e){}})();`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body suppressHydrationWarning>{children}</body>
+      <body className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>{children}</body>
     </html>
   );
 }

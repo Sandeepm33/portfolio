@@ -2,12 +2,22 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { AnimatePresence, motion, useInView, useMotionValue, useReducedMotion, useSpring, useScroll, useTransform } from 'framer-motion';
 import { AlertCircle, ArrowDownRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Code2, Copy, Download, Github, Linkedin, Mail, Menu, Moon, Search, Send, Sun, TerminalSquare, X } from 'lucide-react';
-import emailjs from '@emailjs/browser';
-import { GitHubCalendar } from 'react-github-calendar';
-import CommandPalette from './components/CommandPalette';
 import Preloader from './components/Preloader';
+
+const CommandPalette = dynamic(() => import('./components/CommandPalette'), {
+  ssr: false,
+});
+
+const GitHubCalendar = dynamic(
+  () => import('react-github-calendar').then((mod) => mod.GitHubCalendar),
+  {
+    ssr: false,
+    loading: () => <div style={{ height: '125px', width: '100%' }} />,
+  }
+);
 const stack = [
   { name: 'React', category: 'frontend', use: 'Interface systems', desc: 'Composing product-grade UI with deliberate state, React Hooks, and fluid motion.' },
   { name: 'Next.js', category: 'frontend', use: 'Web products', desc: 'Fast, search-friendly applications with modern routing, SSR, and SSG.' },
@@ -69,10 +79,34 @@ const headingLine = {
 
 function Magnetic({ children, className = '', onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
   const x = useMotionValue(0); const y = useMotionValue(0); const sx = useSpring(x, { stiffness: 220, damping: 16 }); const sy = useSpring(y, { stiffness: 220, damping: 16 });
-  return <motion.button onClick={onClick} onMouseMove={(e) => { const b = e.currentTarget.getBoundingClientRect(); x.set((e.clientX - b.left - b.width / 2) * .16); y.set((e.clientY - b.top - b.height / 2) * .16); }} onMouseLeave={() => { x.set(0); y.set(0); }} style={{ x: sx, y: sy }} className={className}>{children}</motion.button>;
+  return <motion.button type="button" onClick={onClick} onMouseMove={(e) => { const b = e.currentTarget.getBoundingClientRect(); x.set((e.clientX - b.left - b.width / 2) * .16); y.set((e.clientY - b.top - b.height / 2) * .16); }} onMouseLeave={() => { x.set(0); y.set(0); }} style={{ x: sx, y: sy }} className={className}>{children}</motion.button>;
 }
 
-function Cursor() { const x = useMotionValue(-50); const y = useMotionValue(-50); const sx = useSpring(x, { stiffness: 400, damping: 30 }); const sy = useSpring(y, { stiffness: 400, damping: 30 }); const [mode, setMode] = useState(''); useEffect(() => { const move = (e: MouseEvent) => { x.set(e.clientX); y.set(e.clientY); const t = e.target as HTMLElement; setMode(t.closest('[data-cursor]')?.getAttribute('data-cursor') || ''); }; window.addEventListener('mousemove', move); return () => window.removeEventListener('mousemove', move); }, [x, y]); return <><motion.div className="cursor-spotlight" style={{ x: sx, y: sy }} /><motion.div className={`cursor ${mode}`} style={{ x: sx, y: sy }}>{mode === 'view' && <span>VIEW</span>}</motion.div></>; }
+function Cursor() {
+  const x = useMotionValue(-50); const y = useMotionValue(-50);
+  const sx = useSpring(x, { stiffness: 400, damping: 30 });
+  const sy = useSpring(y, { stiffness: 400, damping: 30 });
+  const [mode, setMode] = useState('');
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.matchMedia('(pointer: coarse)').matches) return;
+    const move = (e: MouseEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
+      const t = e.target as HTMLElement;
+      setMode(t.closest('[data-cursor]')?.getAttribute('data-cursor') || '');
+    };
+    window.addEventListener('mousemove', move, { passive: true });
+    return () => window.removeEventListener('mousemove', move);
+  }, [x, y]);
+  return (
+    <>
+      <motion.div className="cursor-spotlight" style={{ x: sx, y: sy }} />
+      <motion.div className={`cursor ${mode}`} style={{ x: sx, y: sy }}>
+        {mode === 'view' && <span>VIEW</span>}
+      </motion.div>
+    </>
+  );
+}
 
 function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
   const [open, setOpen] = useState(false);
@@ -214,7 +248,10 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
           </a>
 
           <button
+            type="button"
             aria-label="Toggle menu"
+            aria-expanded={open}
+            aria-controls="mobile-nav-menu"
             className="icon-button mobile-menu-btn"
             onClick={() => setOpen(!open)}
           >
@@ -252,6 +289,8 @@ function Navbar({ onOpenSearch }: { onOpenSearch: () => void }) {
                   <span className="status-ping" /> Available for opportunities
                 </div>
                 <button
+                  type="button"
+                  aria-label="Close navigation menu"
                   className="mobile-close-btn"
                   onClick={() => setOpen(false)}
                 >
@@ -340,33 +379,20 @@ function Hero() {
 
       <div className="section hero-grid-container">
         <motion.div style={{ y: yText }} className="hero-text-col">
-          <motion.div
-            initial={{ opacity: 0, y: 15, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="hero-badge"
-          >
+          <div className="hero-badge">
             <span className="hero-badge-dot" /> Available for opportunities
-          </motion.div>
+          </div>
 
           <h1 className="hero-title" style={{ display: 'flex', flexWrap: 'wrap', gap: '0 0.28em' }}>
-            <motion.span
-              initial={{ y: 28, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              style={{ display: 'inline-block', paddingBottom: '0.08em' }}
-            >
+            <span style={{ display: 'inline-block', paddingBottom: '0.08em' }}>
               Sandeep
-            </motion.span>{' '}
-            <motion.span
-              initial={{ y: 28, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+            </span>{' '}
+            <span
               className="accent-text text-shimmer"
               style={{ display: 'inline-block', paddingBottom: '0.08em' }}
             >
               Bhargav
-            </motion.span>
+            </span>
             <span style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>
               {' '}— React Developer &amp; Frontend Engineer
             </span>
@@ -376,10 +402,10 @@ function Hero() {
             <AnimatePresence mode="wait">
               <motion.h2
                 key={roleIndex}
-                initial={{ y: 24, opacity: 0, filter: 'blur(4px)' }}
+                initial={{ y: 16, opacity: 0, filter: 'blur(3px)' }}
                 animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                exit={{ y: -24, opacity: 0, filter: 'blur(4px)' }}
-                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                exit={{ y: -16, opacity: 0, filter: 'blur(3px)' }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 className="hero-subtitle"
               >
                 <span className="accent-text">{heroRoles[roleIndex].accent}</span>{' '}
@@ -388,51 +414,39 @@ function Hero() {
             </AnimatePresence>
           </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="hero-desc"
-          >
+          <p className="hero-desc">
             Frontend Developer &amp; React Developer with 2.1+ years of experience building scalable, production web applications using React.js, Next.js, TypeScript, and modern JavaScript (ES6+). Delivers user-centric, responsive web design across SaaS collaboration, recruitment, and e-commerce platforms with robust REST API integrations. Available for frontend developer opportunities in Hyderabad and remote.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.65 }}
+          <div
             className="hero-tech-icons"
+            aria-label="Technologies: React, Node.js, TypeScript, Next.js, Tailwind CSS, Database"
           >
-            <div className="hero-tech-icon react-icon">
-              <svg width="26" height="26" viewBox="-10.5 -9.45 21 18.9" fill="none"><circle cx="0" cy="0" r="2" fill="#0ea5e9"></circle><g stroke="#0ea5e9" strokeWidth="1" fill="none"><ellipse rx="10" ry="4.5"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(60)"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(120)"></ellipse></g></svg>
+            <div className="hero-tech-icon react-icon" title="React">
+              <svg width="26" height="26" viewBox="-10.5 -9.45 21 18.9" fill="none" aria-hidden="true"><circle cx="0" cy="0" r="2" fill="#0ea5e9"></circle><g stroke="#0ea5e9" strokeWidth="1" fill="none"><ellipse rx="10" ry="4.5"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(60)"></ellipse><ellipse rx="10" ry="4.5" transform="rotate(120)"></ellipse></g></svg>
             </div>
-            <div className="hero-tech-icon node-icon">
-              <SiNodedotjs size={24} color="#339933" />
+            <div className="hero-tech-icon node-icon" title="Node.js">
+              <SiNodedotjs size={24} color="#339933" aria-hidden="true" />
             </div>
-            <div className="hero-tech-icon ts-icon">
-              <div className="ts-box">TS</div>
+            <div className="hero-tech-icon ts-icon" title="TypeScript">
+              <div className="ts-box" aria-hidden="true">TS</div>
             </div>
-            <div className="hero-tech-icon next-icon">
-              <SiNextdotjs size={22} color="#ffffff" />
+            <div className="hero-tech-icon next-icon" title="Next.js">
+              <SiNextdotjs size={22} color="#ffffff" aria-hidden="true" />
             </div>
-            <div className="hero-tech-icon tailwind-icon">
-              <svg width="22" height="22" viewBox="0 0 54 33" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z" fill="#06b6d4" /></svg>
+            <div className="hero-tech-icon tailwind-icon" title="Tailwind CSS">
+              <svg width="22" height="22" viewBox="0 0 54 33" fill="none" aria-hidden="true"><path fillRule="evenodd" clipRule="evenodd" d="M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z" fill="#06b6d4" /></svg>
             </div>
-            <div className="hero-tech-icon db-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /></svg>
+            <div className="hero-tech-icon db-icon" title="Databases">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /></svg>
             </div>
-          </motion.div>
+          </div>
 
           <style dangerouslySetInnerHTML={{
             __html: `
               .magnetic-clear { background: none; border: none; padding: 0; margin: 0; cursor: pointer; outline: none; border-radius: 10px; display: inline-flex; }
             `}} />
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="hero-cta-buttons"
-          >
+          <div className="hero-cta-buttons">
             <Magnetic className="magnetic-clear" onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}>
               <span className="hero-btn-primary">
                 <Rocket size={18} fill="#fff" /> View My Work <ArrowRight size={18} />
@@ -443,7 +457,7 @@ function Hero() {
                 <Users size={18} /> Let's Work Together <ArrowRight size={18} />
               </span>
             </Magnetic>
-          </motion.div>
+          </div>
         </motion.div>
 
         <motion.div className="hero-portrait-col">
@@ -456,6 +470,7 @@ function Hero() {
                 sizes="(max-width: 768px) 300px, 450px"
                 style={{ objectFit: 'contain', objectPosition: 'center bottom' }}
                 priority
+                fetchPriority="high"
               />
             </div>
           </motion.div>
@@ -607,9 +622,12 @@ function TechStack() {
 
         {/* Categories Tabs */}
         <div className="tech-tabs-wrapper">
-          <div className="tech-tabs glass">
+          <div className="tech-tabs glass" role="tablist" aria-label="Technology Stack categories">
             {tabs.map(tab => (
               <button
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab.id}
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`tech-tab ${activeTab === tab.id ? 'active' : ''}`}
@@ -1179,7 +1197,7 @@ function Contact() {
     { id: '💡 Other Concept', label: '💡 Other Concept' },
   ];
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const next: Record<string, string> = {};
     if (!form.name.trim()) next.name = 'Please add your name.';
@@ -1189,17 +1207,19 @@ function Contact() {
     setErrors(next);
     if (Object.keys(next).length) { setState('error'); return; }
     setState('loading');
-    emailjs.send(
-      'service_kt3gqgx',
-      'template_saxsbhn',
-      { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message },
-      'jjNHbEqnK46HE_ryq'
-    ).then(() => {
+    try {
+      const emailjs = (await import('@emailjs/browser')).default;
+      await emailjs.send(
+        'service_kt3gqgx',
+        'template_saxsbhn',
+        { from_name: form.name, from_email: form.email, project_type: form.type, message: form.message },
+        'jjNHbEqnK46HE_ryq'
+      );
       setState('success');
       setForm({ name: '', email: '', type: '⚡ New Product', message: '' });
-    }, (error) => {
+    } catch (error) {
       setState('error');
-      const errorMsg = (typeof error === 'object' && error !== null && 'text' in error) ? String(error.text) : String(error || '');
+      const errorMsg = (typeof error === 'object' && error !== null && 'text' in error) ? String((error as any).text) : String(error || '');
       if (errorMsg.includes('Invalid grant') || errorMsg.includes('Gmail_API')) {
         setErrors({ submit: 'Gmail authorization expired. Please reconnect Gmail in EmailJS dashboard, or use direct email below.' });
         console.warn('EmailJS Gmail authorization expired ("Invalid grant"). To fix: open https://dashboard.emailjs.com/admin/services, select service_kt3gqgx, and click Reconnect Account.');
@@ -1207,7 +1227,7 @@ function Contact() {
         setErrors({ submit: 'Failed to send message. Please try again later or reach out directly below.' });
       }
       console.error('EmailJS Error:', errorMsg);
-    });
+    }
   };
 
   return (
@@ -1292,9 +1312,11 @@ function Contact() {
             {/* Input Row */}
             <div className="form-inputs-grid">
               <div className="form-field-group">
-                <label className="field-label">Your Name</label>
+                <label htmlFor="contact-name" className="field-label">Your Name</label>
                 <div className="input-wrap">
                   <input
+                    id="contact-name"
+                    name="name"
                     value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })}
                     placeholder="Sandeep Bhargav"
@@ -1305,9 +1327,11 @@ function Contact() {
               </div>
 
               <div className="form-field-group">
-                <label className="field-label">Your Email</label>
+                <label htmlFor="contact-email" className="field-label">Your Email</label>
                 <div className="input-wrap">
                   <input
+                    id="contact-email"
+                    name="email"
                     type="email"
                     value={form.email}
                     onChange={e => setForm({ ...form, email: e.target.value })}
@@ -1322,12 +1346,14 @@ function Contact() {
             {/* Interactive Project Type Chip Selector */}
             <div className="form-field-group">
               <label className="field-label">Project Category</label>
-              <div className="project-chips-grid">
+              <div className="project-chips-grid" role="radiogroup" aria-label="Project Category">
                 {projectTypes.map((type) => {
                   const isSelected = form.type === type.id;
                   return (
                     <button
                       type="button"
+                      role="radio"
+                      aria-checked={isSelected}
                       key={type.id}
                       onClick={() => setForm({ ...form, type: type.id })}
                       className={`project-chip-btn ${isSelected ? 'active' : ''}`}
@@ -1350,11 +1376,13 @@ function Contact() {
             {/* Message Area */}
             <div className="form-field-group">
               <div className="field-label-row">
-                <label className="field-label">Tell me about your project</label>
+                <label htmlFor="contact-message" className="field-label">Tell me about your project</label>
                 <span className="char-count">{form.message.length} chars</span>
               </div>
               <div className="input-wrap">
                 <textarea
+                  id="contact-message"
+                  name="message"
                   value={form.message}
                   onChange={e => setForm({ ...form, message: e.target.value })}
                   placeholder="Share details on your goal, timeline, tech stack, or scope..."
@@ -1415,7 +1443,7 @@ function Contact() {
   );
 }
 
-function CaseStudy({ project, close }: { project: typeof projects[number] | null; close: () => void }) { useEffect(() => { const key = (e: KeyboardEvent) => e.key === 'Escape' && close(); window.addEventListener('keydown', key); return () => window.removeEventListener('keydown', key); }, [close]); return <AnimatePresence>{project && <motion.div className="modal-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label={`${project.title} case study`} onMouseDown={close}><motion.article className="case-study" initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 30, opacity: 0 }} onMouseDown={e => e.stopPropagation()}><button className="case-close" onClick={close} aria-label="Close case study"><X size={20} /></button><p className="eyebrow">CASE STUDY / {project.number}</p><h2>{project.title}</h2><ProjectPreview project={project} /><div className="case-grid"><div><small>THE PROBLEM</small><p>{project.problem}</p></div><div><small>THE SOLUTION</small><p>{project.description}</p></div><div><small>ARCHITECTURE</small><p>{project.architecture}</p></div><div><small>RESULT</small><p>{project.result}</p></div></div><div className="case-footer"><div className="tags">{project.tech.map(t => <span key={t}>{t}</span>)}</div><div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>{(project as any).url && <a href={(project as any).url} target="_blank" rel="noopener noreferrer" className="button ghost glass" style={{ fontSize: '11px', display: 'flex', alignItems: 'center', gap: '8px' }}>Visit Live Site <ArrowUpRight size={14} /></a>}<button className="button primary" onClick={close}>Back to work <ArrowDownRight size={16} /></button></div></div></motion.article></motion.div>}</AnimatePresence> }
+function CaseStudy({ project, close }: { project: typeof projects[number] | null; close: () => void }) { useEffect(() => { const key = (e: KeyboardEvent) => e.key === 'Escape' && close(); window.addEventListener('keydown', key); return () => window.removeEventListener('keydown', key); }, [close]); return <AnimatePresence>{project && <motion.div className="modal-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label={`${project.title} case study`} onMouseDown={close}><motion.article className="case-study" initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 30, opacity: 0 }} onMouseDown={e => e.stopPropagation()}><button type="button" className="case-close" onClick={close} aria-label="Close case study"><X size={20} /></button><p className="eyebrow">CASE STUDY / {project.number}</p><h2>{project.title}</h2><ProjectPreview project={project} /><div className="case-grid"><div><small>THE PROBLEM</small><p>{project.problem}</p></div><div><small>THE SOLUTION</small><p>{project.description}</p></div><div><small>ARCHITECTURE</small><p>{project.architecture}</p></div><div><small>RESULT</small><p>{project.result}</p></div></div><div className="case-footer"><div className="tags">{project.tech.map(t => <span key={t}>{t}</span>)}</div><div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>{(project as any).url && <a href={(project as any).url} target="_blank" rel="noopener noreferrer" className="button ghost glass" style={{ fontSize: '11px', display: 'flex', alignItems: 'center', gap: '8px' }}>Visit Live Site <ArrowUpRight size={14} /></a>}<button type="button" className="button primary" onClick={close}>Back to work <ArrowDownRight size={16} /></button></div></div></motion.article></motion.div>}</AnimatePresence> }
 
 function ResumeSection() {
   const [open, setOpen] = useState(false);
@@ -1443,7 +1471,7 @@ function ResumeSection() {
               </motion.div>
             </div>
           </motion.h2>
-          <button className="button ghost glass" onClick={() => setOpen(true)} style={{ fontSize: '12px', padding: '16px 24px' }}>
+          <button type="button" className="button ghost glass" onClick={() => setOpen(true)} style={{ fontSize: '12px', padding: '16px 24px' }}>
             Preview Resume <ArrowUpRight size={16} />
           </button>
         </div>
@@ -1451,13 +1479,13 @@ function ResumeSection() {
 
       <AnimatePresence>
         {open && (
-          <motion.div className="modal-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} style={{ zIndex: 100 }}>
+          <motion.div className="modal-layer" role="dialog" aria-modal="true" aria-label="Resume Preview Modal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} style={{ zIndex: 100 }}>
             <motion.div className="case-study" style={{ padding: '0', height: '90vh', display: 'flex', flexDirection: 'column', width: 'min(900px, 100%)', background: '#222' }} initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 30, opacity: 0 }} onClick={e => e.stopPropagation()}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', background: 'var(--surface)', borderBottom: '1px solid var(--line)', flexShrink: 0 }}>
                 <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text)' }}>Resume Preview</h3>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <a href="/images/Sandeep%20bhargav%20_resume.pdf" download className="button primary" style={{ padding: '8px 14px', fontSize: '10px', margin: 0 }}>Download PDF</a>
-                  <button className="case-close" style={{ position: 'relative', top: 0, right: 0, margin: 0 }} onClick={() => setOpen(false)} aria-label="Close resume preview"><X size={18} /></button>
+                  <button type="button" className="case-close" style={{ position: 'relative', top: 0, right: 0, margin: 0 }} onClick={() => setOpen(false)} aria-label="Close resume preview"><X size={18} /></button>
                 </div>
               </div>
 

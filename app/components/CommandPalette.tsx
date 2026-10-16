@@ -311,6 +311,9 @@ export default function CommandPalette({
 
         {/* Command palette modal box */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Command Palette"
           className="command-palette-dialog glass"
           initial={{ opacity: 0, scale: 0.97, y: -20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -322,6 +325,8 @@ export default function CommandPalette({
             <Search className="search-icon" size={18} />
             <input
               ref={inputRef}
+              id="command-palette-search"
+              aria-label="Search sections, projects, and actions"
               type="text"
               className="command-palette-input"
               placeholder="Search sections, projects, and actions..."
